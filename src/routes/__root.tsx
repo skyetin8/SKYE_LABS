@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import "../styles.css";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { ClickSpark } from "../components/site/ClickSpark";
 
 function NotFoundComponent() {
   return (
@@ -131,8 +132,18 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <ClickSpark
+        sparkColor="#17191b"
+        darkSurfaceColor="#fafafa"
+        shape="line"
+        sparkCount={8}
+        sparkSize={14}
+        sparkRadius={30}
+        duration={500}
+      >
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </ClickSpark>
     </QueryClientProvider>
   );
 }

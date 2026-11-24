@@ -3,6 +3,7 @@ import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 import { STUDIO_PRODUCTS, type StudioProduct } from "@/data/products";
 import { Signup } from "@/components/site/Signup";
 import { Footer } from "@/components/site/Footer";
+import { GridDistortion } from "@/components/site/GridDistortion";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -82,15 +83,20 @@ function Index() {
               "radial-gradient(ellipse 115% 105% at 100% 0%, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.75) 32%, rgba(0,0,0,0.4) 58%, rgba(0,0,0,0.12) 80%, rgba(0,0,0,0) 100%)",
           }}
         >
-          <video
-            className="h-full w-full object-cover opacity-85"
-            src="/hero.mp4"
-            poster="/hero-poster.jpg"
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
+          <GridDistortion
+            imageSrc="/hero-poster.jpg"
+            videoSrc="/hero.mp4"
+            grid={15}
+            radius={0.18}
+            strength={0.15}
+            relaxation={0.96}
+            mode="drag"
+            softness={0}
+            chroma={0}
+            idle={0.3}
+            clickRipple={true}
+            intro={true}
+            className="opacity-85"
           />
         </div>
 
