@@ -17,7 +17,8 @@ export const Route = createFileRoute("/products")({
       { property: "og:title", content: "Products — SKYE_LABS" },
       {
         property: "og:description",
-        content: "Explore FrameFlow, Script Symphony, and upcoming SKYE_LABS releases.",
+        content:
+          "Explore FrameFlow, ScriptSymphony, Madam Melody, Glide Departures, Wink Blink Bang Mafia, Pitchify, BurnOut, and LazyLlama Health App.",
       },
     ],
   }),
@@ -142,27 +143,37 @@ function ProductsPage() {
                 params={{ slug: flagship.slug }}
                 className="group relative block overflow-hidden md:col-span-6"
               >
-                {flagship.heroScreenshot ? (
-                  <img
-                    src={flagship.heroScreenshot.src}
-                    alt={flagship.heroScreenshot.alt}
-                    className="studio-ease h-full min-h-[280px] w-full object-cover grayscale transition-transform duration-500 group-hover:scale-[1.03]"
-                  />
-                ) : (
-                  <div className="flex h-full min-h-[280px] flex-col justify-between bg-primary p-8 text-primary-foreground">
-                    <span className="label-mono text-primary-foreground/65">
+                <div className="relative flex h-full min-h-[380px] flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground transition-colors duration-300 group-hover:bg-primary/92 md:min-h-[460px] md:p-10">
+                  {flagship.logo && (
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 flex items-center justify-end pr-4 select-none md:pr-8"
+                    >
+                      <img
+                        src={flagship.logo.src}
+                        alt=""
+                        draggable={false}
+                        className="studio-ease h-[78%] w-[78%] max-w-[360px] object-contain grayscale contrast-125 transition-transform duration-500 group-hover:scale-[1.03] md:h-[84%] md:w-[84%] md:max-w-[400px]"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-primary/90 via-primary/25 to-transparent" />
+                    </div>
+                  )}
+
+                  <div className="relative z-10 flex items-start justify-between gap-6">
+                    <span className="label-mono text-primary-foreground/70">
                       {flagship.index} · {flagship.category}
                     </span>
-                    <div>
-                      <p className="text-3xl font-bold tracking-tight md:text-4xl">
-                        {flagship.name.toUpperCase()}
-                      </p>
-                      <p className="mt-2 label-mono text-primary-foreground/70">
-                        {flagship.platform}
-                      </p>
-                    </div>
                   </div>
-                )}
+
+                  <div className="relative z-10 pt-12">
+                    <p className="text-3xl font-bold tracking-[-0.03em] md:text-5xl">
+                      {flagship.name.toUpperCase()}
+                    </p>
+                    <p className="mt-3 label-mono text-primary-foreground/75">
+                      {flagship.platform}
+                    </p>
+                  </div>
+                </div>
               </Link>
             </div>
           </section>
@@ -195,9 +206,22 @@ function ProductsPage() {
                       <span aria-hidden="true">·</span>
                       <span className="text-foreground">{item.status}</span>
                     </div>
-                    <h3 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-                      {item.name.toUpperCase()}
-                    </h3>
+                    <div className="mt-3 flex items-center gap-3">
+                      {item.logo && (
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-primary p-1.5">
+                          <img
+                            src={item.logo.src}
+                            alt={item.logo.alt}
+                            className={`h-full w-full object-contain grayscale contrast-125 ${
+                              item.logo.blendScreen ? "mix-blend-screen" : ""
+                            }`}
+                          />
+                        </div>
+                      )}
+                      <h3 className="text-3xl font-bold tracking-tight md:text-4xl">
+                        {item.name.toUpperCase()}
+                      </h3>
+                    </div>
                     <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">
                       {item.tagline}
                     </p>

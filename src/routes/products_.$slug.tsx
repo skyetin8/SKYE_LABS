@@ -10,7 +10,31 @@ export const Route = createFileRoute("/products_/$slug")({
     const product = getProductBySlug(params.slug);
     const title = product ? `${product.name} — SKYE_LABS` : "Product Not Found — SKYE_LABS";
     const description =
-      product?.tagline ?? "Explore digital apps, websites, and inventions from SKYE_LABS.";
+      product?.seoDescription ??
+      product?.tagline ??
+      "Explore digital apps, websites, and inventions from SKYE_LABS.";
+    const jsonLd = product
+      ? JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: product.name,
+          applicationCategory:
+            product.slug === "frameflow"
+              ? "MultimediaApplication"
+              : product.category === "Website"
+                ? "WebApplication"
+                : "SoftwareApplication",
+          operatingSystem: "Web Browser",
+          description,
+          url: product.liveUrl ?? `https://skyelabs.us/products/${product.slug}`,
+          creator: {
+            "@type": "Organization",
+            name: "SKYE_LABS",
+          },
+          featureList: product.capabilities.map((c) => `${c.title}: ${c.detail}`),
+        })
+      : null;
+
     return {
       meta: [
         { title },
@@ -18,6 +42,16 @@ export const Route = createFileRoute("/products_/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
       ],
+      ...(jsonLd
+        ? {
+            scripts: [
+              {
+                type: "application/ld+json",
+                children: jsonLd,
+              },
+            ],
+          }
+        : {}),
     };
   },
   component: ProductDetailPage,
@@ -57,171 +91,371 @@ function ProductDetailPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <Header />
+      <Header theme="dark" />
 
       <main className="flex-1">
-        {/* ── Breadcrumb + Hero Split ────────────────────────────── */}
-        <section className="mx-auto max-w-[1400px] px-6 pt-12 pb-16 md:px-10 md:pt-16 md:pb-24">
-          <Link
-            to="/products"
-            className="group inline-flex items-center gap-2 label-mono text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1" />
-            <span>Products / {product.category}</span>
-          </Link>
+        {/* ── Immersive Dark Product Portal ───────────────────────── */}
+        <section
+          className="dark relative overflow-hidden bg-background text-foreground"
+          style={{ ["--hairline" as string]: "oklch(1 0 0 / 14%)" }}
+        >
+          <div
+            aria-hidden="true"
+            className="studio-grain pointer-events-none absolute inset-0 z-0 opacity-30"
+          />
 
-          <div className="mt-10 grid items-stretch gap-10 md:grid-cols-12 md:gap-12">
-            <div className="flex flex-col justify-between md:col-span-6">
-              <div>
+          <div className="relative z-10 mx-auto max-w-[1400px] px-6 pt-10 pb-16 md:px-10 md:pt-14 md:pb-24">
+            <Link
+              to="/products"
+              className="group inline-flex items-center gap-2 label-mono text-muted-foreground transition-colors hover:text-white"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-1" />
+              <span>Products / {product.category}</span>
+            </Link>
+
+            <div className="mt-8 flex flex-col justify-between gap-8 border-b border-hairline pb-10 lg:flex-row lg:items-end">
+              <div className="max-w-3xl">
                 <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
                   <span className="tabular-nums">{product.index}</span>
                   <span aria-hidden="true">·</span>
-                  <span>{product.platform}</span>
+                  <span className="text-white">{product.status}</span>
                   <span aria-hidden="true">·</span>
-                  <span className="font-medium text-foreground">{product.status}</span>
+                  <span>{product.platform}</span>
                 </div>
 
-                <h1 className="mt-6 text-5xl leading-[0.94] font-bold tracking-[-0.03em] md:text-7xl">
-                  {product.name.toUpperCase()}
-                </h1>
-                <p className="mt-6 max-w-xl text-xl leading-snug font-medium text-foreground">
+                <div className="mt-5 flex items-center gap-5 md:gap-6">
+                  {product.logo && (
+                    <img
+                      src={product.logo.src}
+                      alt={product.logo.alt}
+                      draggable={false}
+                      className={`h-16 w-16 shrink-0 object-contain select-none sm:h-20 sm:w-20 md:h-24 md:w-24 ${
+                        product.logo.blendScreen ? "mix-blend-screen" : ""
+                      }`}
+                    />
+                  )}
+                  <h1 className="text-5xl leading-[0.92] font-bold tracking-[-0.035em] text-white md:text-7xl">
+                    {product.name.toUpperCase()}
+                  </h1>
+                </div>
+
+                {product.liveUrl && (
+                  <div className="mt-4 inline-flex items-center gap-3">
+                    <span
+                      className="relative flex h-4 w-4 items-center justify-center"
+                      aria-hidden="true"
+                    >
+                      <span
+                        className="absolute h-4 w-4 animate-ping rounded-full opacity-40 [animation-duration:2.2s]"
+                        style={{ backgroundColor: product.accentColor ?? "#00ABD3" }}
+                      />
+                      <span
+                        className="absolute h-3 w-3 animate-pulse rounded-full border opacity-60"
+                        style={{ borderColor: product.accentColor ?? "#00ABD3" }}
+                      />
+                      <span
+                        className="relative h-1.5 w-1.5 rounded-full"
+                        style={{ backgroundColor: product.accentColor ?? "#00ABD3" }}
+                      />
+                    </span>
+                    <span className="label-mono text-white/90">
+                      {product.status === "In Beta" ? "Live Beta" : "Live Now"}
+                    </span>
+                  </div>
+                )}
+
+                <p className="mt-4 max-w-2xl text-lg leading-snug text-white/80 md:text-2xl">
                   {product.tagline}
-                </p>
-                <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
-                  {product.summary}
                 </p>
               </div>
 
-              <div className="mt-10 flex flex-wrap items-center gap-4">
+              <div className="flex shrink-0 flex-wrap items-center gap-3">
                 {product.liveUrl ? (
                   <a
                     href={product.liveUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="group inline-flex min-h-[44px] items-center gap-3 bg-primary px-6 py-3 label-mono text-primary-foreground transition-opacity duration-200 hover:opacity-85"
+                    className="group studio-ease inline-flex min-h-[48px] items-center gap-3 bg-white px-7 py-3.5 label-mono whitespace-nowrap text-black transition-all duration-200 hover:bg-white/85"
                   >
-                    <span>{product.liveCtaLabel ?? `Open ${product.name}`}</span>
+                    <span>{product.liveCtaLabel ?? `Launch ${product.name}`}</span>
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 ) : (
                   <a
                     href="#test-access"
-                    className="group inline-flex min-h-[44px] items-center gap-3 bg-primary px-6 py-3 label-mono text-primary-foreground transition-opacity duration-200 hover:opacity-85"
+                    className="group studio-ease inline-flex min-h-[48px] items-center gap-3 bg-white px-7 py-3.5 label-mono whitespace-nowrap text-black transition-all duration-200 hover:bg-white/85"
                   >
                     <span>{product.liveCtaLabel ?? "Request Testing Access"}</span>
                     <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
                   </a>
                 )}
 
-                <Link
-                  to="/join-us"
-                  className="inline-flex min-h-[44px] items-center border border-ink px-6 py-3 label-mono text-foreground transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
+                <a
+                  href="#test-access"
+                  className="inline-flex min-h-[48px] items-center border border-white/25 px-6 py-3.5 label-mono whitespace-nowrap text-white transition-colors duration-200 hover:border-white hover:bg-white/10"
                 >
-                  Follow Build Updates
-                </Link>
+                  Follow Updates
+                </a>
               </div>
             </div>
 
-            <div className="md:col-span-6">
-              {product.heroScreenshot ? (
-                <div className="group relative h-full min-h-[320px] overflow-hidden bg-secondary">
-                  <img
-                    src={product.heroScreenshot.src}
-                    alt={product.heroScreenshot.alt}
-                    className="studio-ease h-full w-full object-cover grayscale transition-transform duration-500 group-hover:scale-[1.02]"
-                  />
-                </div>
-              ) : (
-                <div className="flex h-full min-h-[320px] flex-col justify-between bg-primary p-10 text-primary-foreground">
-                  <div className="flex items-center justify-between">
-                    <span className="label-mono text-primary-foreground/65">{product.index}</span>
-                    <span className="label-mono text-primary-foreground/65">
-                      {product.category}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-4xl font-bold tracking-tight md:text-5xl">
-                      {product.name.toUpperCase()}
-                    </p>
-                    <p className="mt-3 label-mono text-primary-foreground/75">{product.platform}</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Problem & Design Approach ──────────────────────────── */}
-        <section className="border-t border-hairline bg-secondary/40">
-          <div className="mx-auto grid max-w-[1400px] gap-12 px-6 py-16 md:grid-cols-12 md:px-10 md:py-24">
-            <div className="md:col-span-6">
-              <p className="label-mono text-muted-foreground">The Friction</p>
-              <h2 className="mt-4 text-2xl leading-snug font-bold tracking-tight md:text-3xl">
-                {product.problem}
-              </h2>
-            </div>
-            <div className="md:col-span-6">
-              <p className="label-mono text-muted-foreground">Design Direction</p>
-              <p className="mt-4 text-lg leading-relaxed text-foreground">{product.approach}</p>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Real Screenshots Gallery (Rendered when screenshots exist) */}
-        {product.screenshots && product.screenshots.length > 0 && (
-          <section className="border-t border-hairline">
-            <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-24">
-              <p className="label-mono text-muted-foreground">Interface & Preview</p>
-              <div className="mt-10 grid gap-10 md:grid-cols-2">
-                {product.screenshots.map((shot) => (
-                  <figure key={shot.src}>
-                    <div className="overflow-hidden bg-secondary">
+            {/* ── Dominant Full-Width Interactive Preview Stage ───── */}
+            {product.heroScreenshots && product.heroScreenshots.length > 0 ? (
+              <div className="mt-10 md:mt-12">
+                {product.liveUrl ? (
+                  <a
+                    href={product.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    draggable={false}
+                    className="group relative block overflow-hidden bg-black select-none focus:outline-none"
+                  >
+                    <div className="grid grid-cols-3 items-center gap-2 px-2 py-6 sm:gap-5 sm:px-6 md:gap-8 md:px-10 md:py-10">
+                      {product.heroScreenshots.map((shot, idx) => (
+                        <div
+                          key={shot.src}
+                          className={`flex items-center justify-center transition-transform duration-500 ${
+                            idx === 1
+                              ? "z-10 scale-[1.03] group-hover:scale-[1.05]"
+                              : "opacity-95 group-hover:opacity-100"
+                          }`}
+                        >
+                          <img
+                            src={shot.src}
+                            alt={shot.alt}
+                            draggable={false}
+                            className="studio-ease max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex items-end justify-between gap-4 bg-gradient-to-t from-black/90 via-black/35 to-transparent px-5 pt-16 pb-5 md:px-8">
+                      <p className="max-w-lg text-sm leading-snug text-white/85">
+                        {product.heroScreenshot?.caption}
+                      </p>
+                      <span className="shrink-0 bg-white px-5 py-2.5 label-mono text-black transition-all duration-300 sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 sm:group-focus-visible:translate-y-0 sm:group-focus-visible:opacity-100">
+                        Try Now
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <div className="grid grid-cols-3 items-center gap-2 bg-black px-2 py-6 select-none sm:gap-5 sm:px-6 md:gap-8 md:px-10 md:py-10">
+                    {product.heroScreenshots.map((shot) => (
                       <img
+                        key={shot.src}
                         src={shot.src}
                         alt={shot.alt}
-                        className="w-full object-cover grayscale transition-transform duration-300 hover:scale-[1.01]"
+                        draggable={false}
+                        className="max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
                       />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : product.heroScreenshot ? (
+              <div className="mt-10 md:mt-12">
+                {product.liveUrl ? (
+                  <a
+                    href={product.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    draggable={false}
+                    className="group relative block bg-black select-none focus:outline-none"
+                  >
+                    <div
+                      className={`relative w-full overflow-hidden bg-black ${
+                        product.heroScreenshot.orientation === "portrait"
+                          ? "flex h-[520px] items-center justify-center py-4 md:h-[600px]"
+                          : "aspect-[16/9]"
+                      }`}
+                    >
+                      <img
+                        src={product.heroScreenshot.src}
+                        alt={product.heroScreenshot.alt}
+                        draggable={false}
+                        className={`studio-ease object-contain grayscale-[35%] select-none transition-all duration-500 group-hover:scale-[1.01] group-hover:grayscale-0 ${
+                          product.heroScreenshot.orientation === "portrait"
+                            ? "h-full w-auto max-w-full"
+                            : "h-full w-full"
+                        }`}
+                      />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-black/85 via-black/30 to-transparent px-5 pt-16 pb-5 md:px-8">
+                        <p className="max-w-lg text-sm leading-snug text-white/85">
+                          {product.heroScreenshot.caption}
+                        </p>
+                        <span className="shrink-0 bg-white px-5 py-2.5 label-mono text-black transition-all duration-300 sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 sm:group-focus-visible:translate-y-0 sm:group-focus-visible:opacity-100">
+                          Try Now
+                        </span>
+                      </div>
                     </div>
-                    {shot.caption && (
-                      <figcaption className="mt-3 label-mono text-muted-foreground">
-                        {shot.caption}
-                      </figcaption>
-                    )}
-                  </figure>
-                ))}
+                  </a>
+                ) : (
+                  <div
+                    className={`bg-black select-none ${
+                      product.heroScreenshot.orientation === "portrait"
+                        ? "flex h-[520px] items-center justify-center py-4 md:h-[600px]"
+                        : ""
+                    }`}
+                  >
+                    <img
+                      src={product.heroScreenshot.src}
+                      alt={product.heroScreenshot.alt}
+                      draggable={false}
+                      className={`object-contain grayscale select-none ${
+                        product.heroScreenshot.orientation === "portrait"
+                          ? "h-full w-auto max-w-full"
+                          : "aspect-[16/9] w-full"
+                      }`}
+                    />
+                  </div>
+                )}
+              </div>
+            ) : product.liveUrl ? (
+              <a
+                href={product.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                draggable={false}
+                className="group relative mt-10 flex min-h-[340px] flex-col justify-between bg-black p-8 transition-colors duration-300 select-none hover:bg-black/80 focus:outline-none md:mt-12 md:min-h-[420px] md:p-12"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="label-mono text-muted-foreground">{product.index}</span>
+                  <span className="label-mono text-muted-foreground">{product.category}</span>
+                </div>
+                <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+                  <div>
+                    <p className="text-4xl font-bold tracking-tight text-white md:text-6xl">
+                      {product.name.toUpperCase()}
+                    </p>
+                    <p className="mt-3 label-mono text-muted-foreground">{product.platform}</p>
+                  </div>
+                  <span className="w-fit shrink-0 bg-white px-5 py-2.5 label-mono text-black transition-all duration-300 sm:translate-y-1 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 sm:group-focus-visible:translate-y-0 sm:group-focus-visible:opacity-100">
+                    Try Now
+                  </span>
+                </div>
+              </a>
+            ) : (
+              <div className="mt-10 flex min-h-[340px] flex-col justify-between bg-black p-8 select-none md:mt-12 md:min-h-[420px] md:p-12">
+                <div className="flex items-center justify-between">
+                  <span className="label-mono text-muted-foreground">{product.index}</span>
+                  <span className="label-mono text-muted-foreground">{product.category}</span>
+                </div>
+                <div>
+                  <p className="text-4xl font-bold tracking-tight text-white md:text-6xl">
+                    {product.name.toUpperCase()}
+                  </p>
+                  <p className="mt-3 label-mono text-muted-foreground">{product.platform}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── Concise Thesis & 3-Step Flow ───────────────────────── */}
+        <section className="border-t border-hairline bg-background">
+          <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-24">
+            <div className="grid gap-10 border-b border-hairline pb-14 md:grid-cols-12 md:items-end">
+              <div className="md:col-span-7">
+                <p className="label-mono text-muted-foreground">Why It Exists</p>
+                <h2 className="mt-4 max-w-2xl text-2xl leading-snug font-bold tracking-tight md:text-4xl">
+                  {product.problem}
+                </h2>
+              </div>
+              <div className="md:col-span-5">
+                <p className="leading-relaxed text-muted-foreground">{product.summary}</p>
               </div>
             </div>
-          </section>
-        )}
 
-        {/* ── How It Works ───────────────────────────────────────── */}
-        <section className="border-t border-hairline">
-          <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-24">
-            <p className="label-mono text-muted-foreground">How It Works</p>
-            <div className="mt-10 grid gap-10 md:grid-cols-3">
+            <div className="grid gap-8 pt-12 md:grid-cols-3 md:gap-10">
               {product.howItWorks.map((step) => (
-                <div key={step.step} className="border-t border-ink/25 pt-6">
+                <div key={step.step} className="border-t border-ink/25 pt-5">
                   <p className="label-mono text-muted-foreground tabular-nums">{step.step}</p>
-                  <h3 className="mt-4 text-2xl font-bold tracking-tight">
+                  <h3 className="mt-3 text-xl font-bold tracking-tight">
                     {step.title.toUpperCase()}
                   </h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">{step.detail}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {step.detail}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── Capabilities & Release Sheet ───────────────────────── */}
+        {/* ── Show, Don't Tell: Workflow Spotlights ──────────────── */}
+        {product.screenshots && product.screenshots.length > 0 && (
+          <section className="border-t border-hairline bg-secondary/35">
+            <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-24">
+              <div className="flex flex-wrap items-baseline justify-between gap-4">
+                <p className="label-mono text-muted-foreground">Inside The Workspace</p>
+                <p className="label-mono text-muted-foreground">Hover frames to inspect color UI</p>
+              </div>
+
+              <div
+                className={`mt-10 grid gap-8 md:gap-10 ${
+                  product.screenshots.every((s) => s.orientation === "portrait") &&
+                  product.screenshots.length >= 4
+                    ? "sm:grid-cols-2 lg:grid-cols-4"
+                    : "md:grid-cols-2"
+                }`}
+              >
+                {product.screenshots.map((shot) => {
+                  const isPortrait = shot.orientation === "portrait";
+                  return (
+                    <figure key={shot.src} className="flex flex-col">
+                      <div
+                        className={`overflow-hidden bg-black select-none ${
+                          isPortrait
+                            ? "flex h-[460px] items-center justify-center p-4"
+                            : "aspect-[16/9]"
+                        }`}
+                      >
+                        <img
+                          src={shot.src}
+                          alt={shot.alt}
+                          draggable={false}
+                          className={`studio-ease grayscale select-none transition-all duration-300 hover:grayscale-0 ${
+                            isPortrait
+                              ? "h-full w-auto max-w-full object-contain"
+                              : "h-full w-full object-contain hover:scale-[1.01]"
+                          }`}
+                        />
+                      </div>
+                      <figcaption className="mt-4">
+                        {shot.title && (
+                          <p className="text-base font-bold tracking-tight text-foreground">
+                            {shot.title}
+                          </p>
+                        )}
+                        {shot.caption && (
+                          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                            {shot.caption}
+                          </p>
+                        )}
+                      </figcaption>
+                    </figure>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── Scannable Capabilities & Technical Sheet ───────────── */}
         <section className="border-t border-hairline">
           <div className="mx-auto grid max-w-[1400px] gap-12 px-6 py-16 md:grid-cols-12 md:px-10 md:py-24">
             <div className="md:col-span-7">
               <p className="label-mono text-muted-foreground">Capabilities</p>
-              <div className="mt-8 divide-y divide-hairline border-t border-b border-hairline">
+              <div className="mt-6 divide-y divide-hairline border-t border-b border-hairline">
                 {product.capabilities.map((cap) => (
-                  <div key={cap.title} className="py-6">
-                    <h3 className="text-xl font-bold tracking-tight">{cap.title}</h3>
-                    <p className="mt-2 max-w-xl leading-relaxed text-muted-foreground">
+                  <div
+                    key={cap.title}
+                    className="grid gap-2 py-5 sm:grid-cols-12 sm:items-baseline sm:gap-6"
+                  >
+                    <h3 className="text-base font-bold tracking-tight sm:col-span-5">
+                      {cap.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground sm:col-span-7">
                       {cap.detail}
                     </p>
                   </div>
@@ -231,11 +465,14 @@ function ProductDetailPage() {
 
             <div className="md:col-span-5">
               <p className="label-mono text-muted-foreground">Release Sheet</p>
-              <dl className="mt-8 divide-y divide-hairline border-t border-b border-hairline">
+              <dl className="mt-6 divide-y divide-hairline border-t border-b border-hairline">
                 {product.specs.map((spec) => (
-                  <div key={spec.label} className="flex items-center justify-between gap-4 py-4">
-                    <dt className="label-mono text-muted-foreground">{spec.label}</dt>
-                    <dd className="text-sm font-medium text-foreground tabular-nums">
+                  <div
+                    key={spec.label}
+                    className="flex items-baseline justify-between gap-6 py-3.5"
+                  >
+                    <dt className="shrink-0 label-mono text-muted-foreground">{spec.label}</dt>
+                    <dd className="text-right text-sm font-medium text-foreground tabular-nums">
                       {spec.value}
                     </dd>
                   </div>

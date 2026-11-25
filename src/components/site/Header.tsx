@@ -8,11 +8,16 @@ const navItems = [
   { to: "/join-us" as const, label: "Join Us" },
 ];
 
-export function Header() {
+export function Header({ theme = "light" }: { theme?: "light" | "dark" }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-hairline bg-background/95 backdrop-blur-sm">
+    <header
+      className={`sticky top-0 z-40 border-b border-hairline bg-background/95 text-foreground backdrop-blur-sm ${
+        theme === "dark" ? "dark" : ""
+      }`}
+      style={theme === "dark" ? { ["--hairline" as string]: "oklch(1 0 0 / 14%)" } : undefined}
+    >
       <div className="mx-auto flex h-14 max-w-[1400px] items-center justify-between gap-8 px-6 md:px-10">
         <Link
           to="/"

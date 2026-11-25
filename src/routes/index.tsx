@@ -21,50 +21,84 @@ export const Route = createFileRoute("/")({
           "An independent New York City invention studio creating original products that resolve real-life friction.",
       },
     ],
-    links: [
-      {
-        rel: "icon",
-        type: "image/svg+xml",
-        href: "/skye_labs-2026logo.svg",
-      },
-    ],
   }),
   component: Index,
 });
 
-function ProductVisualSlot({ product }: { product: StudioProduct }) {
-  if (product.heroScreenshot) {
-    return (
-      <div className="relative h-full min-h-[280px] w-full overflow-hidden bg-secondary">
-        <img
-          src={product.heroScreenshot.src}
-          alt={product.heroScreenshot.alt}
-          className="studio-ease h-full w-full object-cover grayscale transition-transform duration-500 group-hover:scale-[1.03]"
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-95" />
-      </div>
-    );
-  }
-
+function ProductVisualSlot({
+  product,
+  variant = "flagship",
+}: {
+  product: StudioProduct;
+  variant?: "flagship" | "grid";
+}) {
+  const isFlagship = variant === "flagship";
   return (
-    <div className="relative flex h-full min-h-[280px] w-full flex-col justify-between bg-primary p-8 text-primary-foreground transition-colors duration-300 group-hover:bg-primary/92">
-      <div className="flex items-center justify-between gap-4">
-        <span className="label-mono text-primary-foreground/65">{product.index}</span>
-        <span className="label-mono text-primary-foreground/65">{product.category}</span>
+    <div
+      className={`relative flex h-full w-full flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground transition-colors duration-300 group-hover:bg-primary/92 md:p-10 ${
+        isFlagship ? "min-h-[380px] md:min-h-[460px]" : ""
+      }`}
+    >
+      {product.logo && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 flex items-center justify-end pr-4 select-none md:pr-8"
+        >
+          <img
+            src={product.logo.src}
+            alt=""
+            draggable={false}
+            className={`studio-ease object-contain grayscale contrast-125 transition-transform duration-500 ${
+              product.logo.blendScreen
+                ? "scale-[1.15] mix-blend-screen group-hover:scale-[1.19]"
+                : "group-hover:scale-[1.03]"
+            } ${
+              isFlagship
+                ? "h-[78%] w-[78%] max-w-[360px] md:h-[84%] md:w-[84%] md:max-w-[400px]"
+                : "h-[76%] w-[76%] max-w-[290px] md:h-[82%] md:w-[82%] md:max-w-[330px]"
+            }`}
+          />
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/90 via-primary/25 to-transparent" />
+        </div>
+      )}
+
+      <div className="relative z-10 flex items-start justify-between gap-6">
+        <div className="flex items-center gap-3 label-mono text-primary-foreground/70">
+          <span className="tabular-nums">{product.index}</span>
+          {product.logo && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{product.category}</span>
+            </>
+          )}
+        </div>
+
+        {!product.logo && (
+          <span className="label-mono text-primary-foreground/65">{product.category}</span>
+        )}
       </div>
-      <div>
-        <p className="text-3xl font-bold tracking-[-0.03em] md:text-4xl">
+
+      <div className="relative z-10 pt-12">
+        <p
+          className={`font-bold tracking-[-0.03em] ${
+            isFlagship ? "text-3xl md:text-5xl" : "text-2xl sm:text-3xl lg:text-4xl"
+          }`}
+        >
           {product.name.toUpperCase()}
         </p>
-        <p className="mt-2 label-mono text-primary-foreground/70">{product.platform}</p>
+        <p className="mt-3 label-mono text-primary-foreground/75">{product.platform}</p>
       </div>
     </div>
   );
 }
 
 function Index() {
-  const flagship = STUDIO_PRODUCTS[0];
-  const secondaryProducts = STUDIO_PRODUCTS.filter((p) => p.featured && p.slug !== flagship?.slug);
+  const featuredProducts = STUDIO_PRODUCTS.filter((p) => p.featured).sort(
+    (a, b) => (a.homepagePriority ?? 99) - (b.homepagePriority ?? 99),
+  );
+  const flagship = featuredProducts[0] ?? STUDIO_PRODUCTS[0];
+  const showcaseRows = featuredProducts.slice(0, 3);
+  const gridProducts = featuredProducts.slice(3);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
@@ -198,73 +232,85 @@ function Index() {
             </Link>
           </div>
 
-          {flagship && (
-            <div className="grid items-stretch gap-10 border-b border-hairline py-14 md:grid-cols-12 md:gap-12 md:py-20">
-              <div className="flex flex-col justify-between md:col-span-6">
-                <div>
-                  <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
-                    <span className="tabular-nums">{flagship.index}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{flagship.category}</span>
-                    <span aria-hidden="true">·</span>
-                    <span className="font-medium text-foreground">{flagship.status}</span>
+          {showcaseRows.map((product, idx) => {
+            const flipLayout = idx % 2 === 1;
+            return (
+              <div
+                key={product.slug}
+                className="grid items-stretch gap-10 border-b border-hairline py-14 md:grid-cols-12 md:gap-12 md:py-20"
+              >
+                <div
+                  className={`flex flex-col justify-between md:col-span-6 ${
+                    flipLayout ? "md:order-2" : "md:order-1"
+                  }`}
+                >
+                  <div>
+                    <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
+                      <span className="tabular-nums">{product.index}</span>
+                      <span aria-hidden="true">·</span>
+                      <span>{product.category}</span>
+                      <span aria-hidden="true">·</span>
+                      <span className="font-medium text-foreground">{product.status}</span>
+                    </div>
+
+                    <h3 className="mt-6 text-4xl leading-[0.98] font-bold tracking-[-0.03em] md:text-5xl">
+                      {product.name.toUpperCase()}
+                    </h3>
+                    <p className="mt-5 max-w-xl text-lg leading-relaxed text-foreground">
+                      {product.tagline}
+                    </p>
+                    <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
+                      {product.summary}
+                    </p>
                   </div>
 
-                  <h3 className="mt-6 text-4xl leading-[0.98] font-bold tracking-[-0.03em] md:text-5xl">
-                    {flagship.name.toUpperCase()}
-                  </h3>
-                  <p className="mt-5 max-w-xl text-lg leading-relaxed text-foreground">
-                    {flagship.tagline}
-                  </p>
-                  <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
-                    {flagship.summary}
-                  </p>
-                </div>
-
-                <div className="mt-10 flex flex-wrap items-center gap-4">
-                  <Link
-                    to="/products/$slug"
-                    params={{ slug: flagship.slug }}
-                    className="group studio-ease inline-flex min-h-[44px] items-center gap-3 bg-primary px-6 py-3 label-mono text-primary-foreground transition-opacity duration-200 hover:opacity-85"
-                  >
-                    <span>Open Product Page</span>
-                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                  </Link>
-                  {flagship.liveUrl && (
-                    <a
-                      href={flagship.liveUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group inline-flex min-h-[44px] items-center gap-2 border border-ink px-6 py-3 label-mono text-foreground transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
+                  <div className="mt-10 flex flex-wrap items-center gap-4">
+                    <Link
+                      to="/products/$slug"
+                      params={{ slug: product.slug }}
+                      className="group studio-ease inline-flex min-h-[44px] items-center gap-3 bg-primary px-6 py-3 label-mono text-primary-foreground transition-opacity duration-200 hover:opacity-85"
                     >
-                      <span>{flagship.liveCtaLabel ?? "Test Web App"}</span>
-                      <ArrowUpRight className="h-4 w-4" />
-                    </a>
-                  )}
+                      <span>Open Product Page</span>
+                      <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                    </Link>
+                    {product.liveUrl && (
+                      <a
+                        href={product.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group inline-flex min-h-[44px] items-center gap-2 border border-ink px-6 py-3 label-mono text-foreground transition-colors duration-200 hover:bg-primary hover:text-primary-foreground"
+                      >
+                        <span>{product.liveCtaLabel ?? "Test Web App"}</span>
+                        <ArrowUpRight className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
                 </div>
+
+                <Link
+                  to="/products/$slug"
+                  params={{ slug: product.slug }}
+                  className={`group relative block overflow-hidden md:col-span-6 ${
+                    flipLayout ? "md:order-1" : "md:order-2"
+                  }`}
+                >
+                  <ProductVisualSlot product={product} variant="flagship" />
+                </Link>
               </div>
+            );
+          })}
 
-              <Link
-                to="/products/$slug"
-                params={{ slug: flagship.slug }}
-                className="group relative block overflow-hidden md:col-span-6"
-              >
-                <ProductVisualSlot product={flagship} />
-              </Link>
-            </div>
-          )}
-
-          {secondaryProducts.length > 0 && (
+          {gridProducts.length > 0 && (
             <div className="grid gap-12 pt-14 md:grid-cols-2">
-              {secondaryProducts.map((product) => (
+              {gridProducts.map((product) => (
                 <Link
                   key={product.slug}
                   to="/products/$slug"
                   params={{ slug: product.slug }}
                   className="group block border-b border-hairline pb-10 transition-colors duration-200"
                 >
-                  <div className="aspect-[16/10] overflow-hidden">
-                    <ProductVisualSlot product={product} />
+                  <div className="h-[340px] overflow-hidden md:h-[400px]">
+                    <ProductVisualSlot product={product} variant="grid" />
                   </div>
 
                   <div className="mt-6 flex items-center justify-between gap-4">
@@ -316,7 +362,7 @@ function Index() {
                   step: "01",
                   horizon: "Now · Software & Web",
                   title: "Apps & Web Platforms",
-                  body: "Designing and shipping focused digital tools like FrameFlow and Script Symphony—open for direct browser use and early testing.",
+                  body: "Designing and shipping focused digital tools like FrameFlow, ScriptSymphony, Madam Melody, and Wink Blink Bang Mafia—open for browser use and testing.",
                 },
                 {
                   step: "02",
