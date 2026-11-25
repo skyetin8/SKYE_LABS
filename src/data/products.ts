@@ -45,6 +45,8 @@ export interface StudioProduct {
   heroScreenshots?: ProductScreenshot[];
   /** Additional workflow screenshots for the product detail page */
   screenshots?: ProductScreenshot[];
+  /** Optional heading override for the screenshots gallery section */
+  previewSectionLabel?: string;
   howItWorks: Array<{
     step: string;
     title: string;
@@ -366,9 +368,9 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
         orientation: "portrait",
       },
       {
-        src: "/assets/aistudio/Screenshot_2026-11-24_at_7.11.12_PM_c20d7699.png",
-        alt: "Madam Melody Ultraviolet purple theme home screen with headphone mascot and Jam controls",
-        title: "Ultraviolet Theme",
+        src: "/assets/aistudio/Screenshot_2026-11-24_at_7.11.43_PM_e6ca06cf.png",
+        alt: "Madam Melody Ruby red theme home screen with headphone mascot and Best score counter",
+        title: "Ruby Theme",
         orientation: "portrait",
       },
     ],
@@ -454,47 +456,140 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     status: "In Development",
     featured: true,
     homepagePriority: 4,
-    // Ready for user's 1-sentence tagline, short summary, and logo (screenshots coming later)
-    tagline: "1-sentence tagline coming soon for Glide Departures.",
+    tagline:
+      "Live departure and security line tracking app right in your pocket for the next time you fly.",
     summary:
-      "Short summary template ready for Glide Departures while in active development ahead of web, iOS, and Android launch.",
+      "Everything you need for travel day in one pocket companion—live security wait times, flight prep reminders and alarms, takeoff and landing notifications for loved ones, shared doodles, and a two-minute breathing zone for nervous flyers.",
     seoDescription:
-      "Glide Departures by SKYE_LABS — upcoming web and mobile application currently in development for Web, iOS, and Android.",
-    problem: "Problem statement template — ready for your exact Glide Departures copy.",
-    approach: "Approach template — ready for your exact Glide Departures copy.",
-    platform: "Coming Soon (Web · iOS · Android)",
+      "Glide Departures by SKYE_LABS is an upcoming departure and security line tracking app currently in development. Track live airport wait times, schedule flight reminders and alarms, notify loved ones on takeoff and landing, send and receive calming doodles, and take a two-minute breathing break before you fly.",
+    problem:
+      "Travel day splits your attention across security lines, departure gates, forgotten alarms, pre-flight nerves, and loved ones wondering if you made it safely.",
+    approach:
+      "Unify live security line tracking, flight reminders, loved-one takeoff and landing alerts, shared doodles, and a two-minute breathing reset in one calm travel-day app.",
+    platform: "In Development · Web, iOS & Android Coming Soon",
     liveCtaLabel: "Join Early Access",
+    accentColor: "#68C8EC",
+    logo: {
+      src: "/assets/aistudio/Vector_2_e19f8fd4.svg",
+      alt: "Glide Departures brandmark",
+    },
+    heroScreenshot: {
+      src: "/assets/aistudio/Glide_App_Screen__1__b307dc71.png",
+      alt: "Glide Departures concept screen showing 25-minute security line wait time, Gate A51, Airport MCO, Notify Me, De-Stress, Set Alarm, and departure countdown",
+      title: "Glide Departures Concept",
+      caption:
+        "Early design mockups — Glide Departures is currently in development and not yet available to use.",
+      orientation: "portrait",
+    },
+    heroScreenshots: [
+      {
+        src: "/assets/aistudio/Glide_App_Screen_933e3c2a.png",
+        alt: "Glide Departures concept welcome screen reading Less Waiting. More going.",
+        title: "Welcome Concept",
+        orientation: "portrait",
+      },
+      {
+        src: "/assets/aistudio/Glide_App_Screen__1__b307dc71.png",
+        alt: "Glide Departures concept dashboard with live security line wait time, Notify Me, De-Stress, Set Alarm, Gate A51, Airport MCO, and departure timer",
+        title: "Live Departure & Security Tracker",
+        orientation: "portrait",
+      },
+      {
+        src: "/assets/aistudio/De-Stress__2__da034ea6.png",
+        alt: "Glide Departures Breathe Deeply concept screen for a two-minute pre-flight breathing reset",
+        title: "Two-Minute Breather",
+        orientation: "portrait",
+      },
+    ],
+    previewSectionLabel: "Early Concept Mockups · Not Yet Live",
+    screenshots: [
+      {
+        src: "/assets/aistudio/Log_In_3a367525.png",
+        alt: "Glide Departures concept screen with options to Schedule A Flight Reminder, I am about to take a flight, or I am a loved one",
+        title: "Reminders & Loved-One Mode",
+        caption:
+          "Schedule prep reminders and alarms, start a trip, or join as a loved one for live flight updates.",
+        orientation: "portrait",
+      },
+      {
+        src: "/assets/aistudio/Line_Identify_Questions_5fad29e3.png",
+        alt: "Glide Departures concept airport picker screen showing Miami International Airport (MIA)",
+        title: "Pick Your Departing Airport",
+        caption:
+          "Select your airport to check live security line wait estimates and gate countdowns.",
+        orientation: "portrait",
+      },
+      {
+        src: "/assets/aistudio/De-Stress__1__4d6d57bf.png",
+        alt: "Glide Departures De-Stress hub concept screen with Quick Breather timer, Scribbles, and Doodles from loved ones",
+        title: "Pre-Flight De-Stress Zone",
+        caption:
+          "Jump into a two-minute breathing reset, scribble at the gate, or view incoming notes.",
+        orientation: "portrait",
+      },
+      {
+        src: "/assets/aistudio/De-Stress_cc2eea41.png",
+        alt: "Glide Departures Send A Doodle concept screen with sticky-note drawing canvas and color palette",
+        title: "Send & Receive Doodles",
+        caption:
+          "Sketch a sticky-note doodle to reassure a nervous flyer—or send one back to family.",
+        orientation: "portrait",
+      },
+    ],
     howItWorks: [
       {
         step: "01",
-        title: "Core Workflow One",
-        detail: "Step description ready once final Glide Departures copy is provided.",
+        title: "Plan & Track Live",
+        detail:
+          "Schedule flight prep reminders and backup alarms, then follow live security line wait times and departure countdowns at your airport.",
       },
       {
         step: "02",
-        title: "Core Workflow Two",
-        detail: "Step description ready once final Glide Departures copy is provided.",
+        title: "Notify Loved Ones",
+        detail:
+          "Keep family and friends in the loop automatically when you’re taking off and the moment your flight lands.",
       },
       {
         step: "03",
-        title: "Core Workflow Three",
-        detail: "Step description ready once final Glide Departures copy is provided.",
+        title: "Calm Travel Nerves",
+        detail:
+          "Step into a two-minute guided breathing zone at the airport or trade quick doodles with loved ones before boarding.",
       },
     ],
     capabilities: [
       {
-        title: "Cross-Platform Roadmap",
-        detail: "Being built for upcoming release across Web, iOS, and Android.",
+        title: "Live Security Line & Departure Tracking",
+        detail:
+          "Check estimated security wait times, gate info, and time to departure right from your pocket.",
       },
       {
-        title: "Feature Highlight",
-        detail: "Capability slot ready for your exact Glide Departures feature copy.",
+        title: "Takeoff & Landing Alerts for Loved Ones",
+        detail:
+          "Automatically notify the people waiting on you when you take off and as soon as you land.",
+      },
+      {
+        title: "Flight Reminders & Backup Alarms",
+        detail:
+          "Schedule reminders to get ready and set dedicated alarms so you never forget or miss a flight.",
+      },
+      {
+        title: "Doodles Between Flyers & Loved Ones",
+        detail:
+          "Send and receive hand-drawn sticky-note doodles to stay connected when either side feels nervous about flying.",
+      },
+      {
+        title: "Two-Minute Breathing Meditation Zone",
+        detail:
+          "Take a guided two-minute breather anywhere in the airport to decompress before boarding.",
       },
     ],
     specs: [
       { label: "Category", value: "Web App" },
-      { label: "Status", value: "In Development" },
-      { label: "Live URL", value: "Coming Soon" },
+      { label: "Status", value: "In Development (Not Live Yet)" },
+      { label: "Previews", value: "Early Concept Mockups" },
+      { label: "Core Tools", value: "Security Wait Times · Departure Timer · Alarms" },
+      { label: "Loved Ones", value: "Takeoff & Landing Alerts · Shared Doodles" },
+      { label: "Calm Mode", value: "2-Minute Breathing Meditation Zone" },
       { label: "Platform", value: "Web · iOS · Android (Coming Soon)" },
     ],
   },

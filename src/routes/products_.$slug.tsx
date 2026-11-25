@@ -239,16 +239,33 @@ function ProductDetailPage() {
                     </div>
                   </a>
                 ) : (
-                  <div className="grid grid-cols-3 items-center gap-2 bg-black px-2 py-6 select-none sm:gap-5 sm:px-6 md:gap-8 md:px-10 md:py-10">
-                    {product.heroScreenshots.map((shot) => (
-                      <img
-                        key={shot.src}
-                        src={shot.src}
-                        alt={shot.alt}
-                        draggable={false}
-                        className="max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
-                      />
-                    ))}
+                  <div className="relative overflow-hidden bg-black select-none">
+                    <div className="grid grid-cols-3 items-center gap-2 px-2 py-6 pb-16 sm:gap-5 sm:px-6 md:gap-8 md:px-10 md:py-10 md:pb-20">
+                      {product.heroScreenshots.map((shot, idx) => (
+                        <div
+                          key={shot.src}
+                          className={`flex items-center justify-center ${
+                            idx === 1 ? "z-10 scale-[1.03]" : "opacity-95"
+                          }`}
+                        >
+                          <img
+                            src={shot.src}
+                            alt={shot.alt}
+                            draggable={false}
+                            className="max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-wrap items-end justify-between gap-4 bg-gradient-to-t from-black/95 via-black/45 to-transparent px-5 pt-16 pb-5 md:px-8">
+                      <p className="max-w-xl text-sm leading-snug text-white/85">
+                        {product.heroScreenshot?.caption ??
+                          "Early concept preview — currently in development."}
+                      </p>
+                      <span className="shrink-0 border border-white/25 bg-black/70 px-4 py-2 label-mono text-white/90">
+                        Concept Only · Not Live
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>
@@ -387,7 +404,9 @@ function ProductDetailPage() {
           <section className="border-t border-hairline bg-secondary/35">
             <div className="mx-auto max-w-[1400px] px-6 py-16 md:px-10 md:py-24">
               <div className="flex flex-wrap items-baseline justify-between gap-4">
-                <p className="label-mono text-muted-foreground">Inside The Workspace</p>
+                <p className="label-mono text-muted-foreground">
+                  {product.previewSectionLabel ?? "Inside The Workspace"}
+                </p>
                 <p className="label-mono text-muted-foreground">Hover frames to inspect color UI</p>
               </div>
 
