@@ -7,13 +7,13 @@ import { Signup } from "@/components/site/Signup";
 export const Route = createFileRoute("/vision")({
   head: () => ({
     meta: [
-      { title: "Vision — SKYE_LABS" },
+      { title: "Vision | SKYE_LABS" },
       {
         name: "description",
         content:
           "How SKYE_LABS moves from digital apps and inventions today toward lasting community, housing, and institutional work.",
       },
-      { property: "og:title", content: "Vision — SKYE_LABS" },
+      { property: "og:title", content: "Vision | SKYE_LABS" },
       {
         property: "og:description",
         content: "Digital Products → Physical Inventions → Community Infrastructure.",
@@ -39,7 +39,7 @@ const horizons = [
     id: "02",
     horizon: "Phase Two · Next",
     title: "Physical Inventions",
-    body: "As our digital products build momentum, we aim to expand into tactile, small-batch physical objects designed for everyday utility—resolving ordinary domestic and personal friction with honest materials.",
+    body: "As our digital products build momentum, we aim to expand into tactile, small-batch physical objects designed for everyday utility, resolving ordinary domestic and personal friction with honest materials.",
     points: [
       "Everyday physical inventions in early research",
       "Direct-to-consumer & preorder launch model",
@@ -50,7 +50,7 @@ const horizons = [
     id: "03",
     horizon: "Phase Three · Long-Term",
     title: "Community & Institutional Initiatives",
-    body: "Our long-term ambition extends beyond products. Over time, we hope to channel studio revenue into future nonprofit and real-estate initiatives—supporting housing stability, neighborhood institutions, and church-connected community work.",
+    body: "Our long-term ambition extends beyond products. Over time, we hope to channel studio revenue into future nonprofit and real-estate initiatives supporting housing stability, neighborhood institutions, and church-connected community work.",
     points: [
       "Supportive housing & community stabilization goals",
       "Church & neighborhood institutional partnerships",
@@ -142,7 +142,7 @@ function VisionPage() {
                 SELF-SUSTAINING BY DESIGN.
               </h2>
               <p className="mt-5 leading-relaxed text-muted-foreground">
-                We are building SKYE_LABS from the ground up—not as a finished corporation
+                We are building SKYE_LABS from the ground up, not as a finished corporation
                 pretending to be bigger than it is, but as an independent studio committed to
                 earning its impact one real product at a time.
               </p>

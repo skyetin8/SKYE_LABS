@@ -8,7 +8,7 @@ import { getProductBySlug, STUDIO_PRODUCTS } from "@/data/products";
 export const Route = createFileRoute("/products_/$slug")({
   head: ({ params }) => {
     const product = getProductBySlug(params.slug);
-    const title = product ? `${product.name} — SKYE_LABS` : "Product Not Found — SKYE_LABS";
+    const title = product ? `${product.name} | SKYE_LABS` : "Product Not Found | SKYE_LABS";
     const description =
       product?.seoDescription ??
       product?.tagline ??
@@ -104,6 +104,26 @@ function ProductDetailPage() {
             className="studio-grain pointer-events-none absolute inset-0 z-0 opacity-30"
           />
 
+          {product.artwork?.[0] && (
+            <img
+              src={product.artwork[0].src}
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              className="pointer-events-none absolute top-10 right-6 z-0 hidden w-44 -rotate-6 opacity-25 select-none lg:block xl:right-12 xl:w-60"
+            />
+          )}
+
+          {product.artwork?.[1] && (
+            <img
+              src={product.artwork[1].src}
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+              className="pointer-events-none absolute bottom-8 left-4 z-0 hidden w-36 rotate-6 opacity-20 select-none xl:block"
+            />
+          )}
+
           <div className="relative z-10 mx-auto max-w-[1400px] px-6 pt-10 pb-16 md:px-10 md:pt-14 md:pb-24">
             <Link
               to="/products"
@@ -139,27 +159,49 @@ function ProductDetailPage() {
                   </h1>
                 </div>
 
-                {product.liveUrl && (
-                  <div className="mt-4 inline-flex items-center gap-3">
-                    <span
-                      className="relative flex h-4 w-4 items-center justify-center"
-                      aria-hidden="true"
+                {product.liveUrl ? (
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <div
+                      className={`inline-flex items-center gap-2.5 ${
+                        product.status === "Live Beta"
+                          ? "border border-white/30 bg-white/5 px-3 py-1.5"
+                          : ""
+                      }`}
                     >
                       <span
-                        className="absolute h-4 w-4 animate-ping rounded-full opacity-40 [animation-duration:2.2s]"
-                        style={{ backgroundColor: product.accentColor ?? "#00ABD3" }}
-                      />
-                      <span
-                        className="absolute h-3 w-3 animate-pulse rounded-full border opacity-60"
-                        style={{ borderColor: product.accentColor ?? "#00ABD3" }}
-                      />
-                      <span
-                        className="relative h-1.5 w-1.5 rounded-full"
-                        style={{ backgroundColor: product.accentColor ?? "#00ABD3" }}
-                      />
-                    </span>
-                    <span className="label-mono text-white/90">
-                      {product.status === "In Beta" ? "Live Beta" : "Live Now"}
+                        className="relative flex h-4 w-4 items-center justify-center"
+                        aria-hidden="true"
+                      >
+                        <span
+                          className="absolute h-4 w-4 animate-ping rounded-full opacity-40 [animation-duration:2.2s]"
+                          style={{ backgroundColor: product.accentColor ?? "#00ABD3" }}
+                        />
+                        <span
+                          className="absolute h-3 w-3 animate-pulse rounded-full border opacity-60"
+                          style={{ borderColor: product.accentColor ?? "#00ABD3" }}
+                        />
+                        <span
+                          className="relative h-1.5 w-1.5 rounded-full"
+                          style={{ backgroundColor: product.accentColor ?? "#00ABD3" }}
+                        />
+                      </span>
+                      <span className="label-mono text-white">
+                        {product.status === "Live Beta"
+                          ? "Live Beta · Open for Testing"
+                          : "Live Now · Ready in Browser"}
+                      </span>
+                    </div>
+                    {product.status === "Live Beta" && (
+                      <span className="label-mono text-white/55">
+                        Early build, active &amp; evolving
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <div className="mt-4 inline-flex items-center gap-2.5 border border-white/20 px-3 py-1.5">
+                    <span className="h-2 w-2 border border-white/60" aria-hidden="true" />
+                    <span className="label-mono text-white/80">
+                      {product.status} · Not Live Yet
                     </span>
                   </div>
                 )}
@@ -181,13 +223,13 @@ function ProductDetailPage() {
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 ) : (
-                  <a
-                    href="#test-access"
+                  <Link
+                    to="/join-us"
                     className="group studio-ease inline-flex min-h-[48px] items-center gap-3 bg-white px-7 py-3.5 label-mono whitespace-nowrap text-black transition-all duration-200 hover:bg-white/85"
                   >
-                    <span>{product.liveCtaLabel ?? "Request Testing Access"}</span>
+                    <span>{product.liveCtaLabel ?? "Join Early Access"}</span>
                     <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                  </a>
+                  </Link>
                 )}
 
                 <a
@@ -220,12 +262,28 @@ function ProductDetailPage() {
                               : "opacity-95 group-hover:opacity-100"
                           }`}
                         >
-                          <img
-                            src={shot.src}
-                            alt={shot.alt}
-                            draggable={false}
-                            className="studio-ease max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
-                          />
+                          {shot.cropToPortrait ? (
+                            <div className="aspect-[5/8] w-full max-w-[320px] overflow-hidden bg-black">
+                              <img
+                                src={shot.src}
+                                alt={shot.alt}
+                                draggable={false}
+                                style={
+                                  shot.objectPosition
+                                    ? { objectPosition: shot.objectPosition }
+                                    : undefined
+                                }
+                                className="studio-ease h-full w-full object-cover select-none"
+                              />
+                            </div>
+                          ) : (
+                            <img
+                              src={shot.src}
+                              alt={shot.alt}
+                              draggable={false}
+                              className="studio-ease max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
+                            />
+                          )}
                         </div>
                       ))}
                     </div>
@@ -248,19 +306,35 @@ function ProductDetailPage() {
                             idx === 1 ? "z-10 scale-[1.03]" : "opacity-95"
                           }`}
                         >
-                          <img
-                            src={shot.src}
-                            alt={shot.alt}
-                            draggable={false}
-                            className="max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
-                          />
+                          {shot.cropToPortrait ? (
+                            <div className="aspect-[5/8] w-full max-w-[320px] overflow-hidden bg-black">
+                              <img
+                                src={shot.src}
+                                alt={shot.alt}
+                                draggable={false}
+                                style={
+                                  shot.objectPosition
+                                    ? { objectPosition: shot.objectPosition }
+                                    : undefined
+                                }
+                                className="h-full w-full object-cover select-none"
+                              />
+                            </div>
+                          ) : (
+                            <img
+                              src={shot.src}
+                              alt={shot.alt}
+                              draggable={false}
+                              className="max-h-[260px] w-full object-contain select-none sm:max-h-[420px] md:max-h-[540px]"
+                            />
+                          )}
                         </div>
                       ))}
                     </div>
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-wrap items-end justify-between gap-4 bg-gradient-to-t from-black/95 via-black/45 to-transparent px-5 pt-16 pb-5 md:px-8">
                       <p className="max-w-xl text-sm leading-snug text-white/85">
                         {product.heroScreenshot?.caption ??
-                          "Early concept preview — currently in development."}
+                          "Early concept preview. Currently in development."}
                       </p>
                       <span className="shrink-0 border border-white/25 bg-black/70 px-4 py-2 label-mono text-white/90">
                         Concept Only · Not Live
@@ -415,7 +489,10 @@ function ProductDetailPage() {
                   product.screenshots.every((s) => s.orientation === "portrait") &&
                   product.screenshots.length >= 4
                     ? "sm:grid-cols-2 lg:grid-cols-4"
-                    : "md:grid-cols-2"
+                    : product.screenshots.every((s) => s.orientation === "portrait") &&
+                        product.screenshots.length === 3
+                      ? "sm:grid-cols-2 lg:grid-cols-3"
+                      : "md:grid-cols-2"
                 }`}
               >
                 {product.screenshots.map((shot) => {
@@ -429,16 +506,32 @@ function ProductDetailPage() {
                             : "aspect-[16/9]"
                         }`}
                       >
-                        <img
-                          src={shot.src}
-                          alt={shot.alt}
-                          draggable={false}
-                          className={`studio-ease grayscale select-none transition-all duration-300 hover:grayscale-0 ${
-                            isPortrait
-                              ? "h-full w-auto max-w-full object-contain"
-                              : "h-full w-full object-contain hover:scale-[1.01]"
-                          }`}
-                        />
+                        {shot.cropToPortrait ? (
+                          <div className="aspect-[5/8] h-full max-w-full overflow-hidden">
+                            <img
+                              src={shot.src}
+                              alt={shot.alt}
+                              draggable={false}
+                              style={
+                                shot.objectPosition
+                                  ? { objectPosition: shot.objectPosition }
+                                  : undefined
+                              }
+                              className="studio-ease h-full w-full object-cover grayscale select-none transition-all duration-300 hover:grayscale-0"
+                            />
+                          </div>
+                        ) : (
+                          <img
+                            src={shot.src}
+                            alt={shot.alt}
+                            draggable={false}
+                            className={`studio-ease grayscale select-none transition-all duration-300 hover:grayscale-0 ${
+                              isPortrait
+                                ? "h-full w-auto max-w-full object-contain"
+                                : "h-full w-full object-contain hover:scale-[1.01]"
+                            }`}
+                          />
+                        )}
                       </div>
                       <figcaption className="mt-4">
                         {shot.title && (
@@ -497,6 +590,44 @@ function ProductDetailPage() {
                   </div>
                 ))}
               </dl>
+
+              {product.wordmark && (
+                <div className="mt-8 bg-black p-6 text-white">
+                  <p className="label-mono text-white/60">Official Wordmark</p>
+                  <div className="mt-5 flex items-center justify-center border border-white/12 bg-white/[0.03] px-6 py-7">
+                    <img
+                      src={product.wordmark.src}
+                      alt={product.wordmark.alt}
+                      draggable={false}
+                      className="max-h-12 w-auto max-w-full object-contain select-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {product.artwork && product.artwork.length > 0 && (
+                <div className="mt-8 bg-black p-6 text-white">
+                  <p className="label-mono text-white/60">Original In-Game Artwork</p>
+                  <div className="mt-5 grid grid-cols-2 gap-4">
+                    {product.artwork.map((art) => (
+                      <div
+                        key={art.src}
+                        className="group flex flex-col items-center justify-between border border-white/12 bg-white/[0.03] p-5"
+                      >
+                        <img
+                          src={art.src}
+                          alt={art.alt}
+                          draggable={false}
+                          className="studio-ease h-24 w-24 object-contain select-none transition-transform duration-300 group-hover:scale-105"
+                        />
+                        <span className="mt-4 text-center label-mono text-white/75">
+                          {art.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>

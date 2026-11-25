@@ -80,14 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SKYE_LABS — Product Design & Technology" },
+      { title: "SKYE_LABS | Product Design & Technology" },
       {
         name: "description",
         content:
           "SKYE_LABS is an independent product design and technology company in New York City. Never Impossible.",
       },
       { name: "author", content: "SKYE_LABS" },
-      { property: "og:title", content: "SKYE_LABS — Never Impossible" },
+      { property: "og:title", content: "SKYE_LABS | Never Impossible" },
       { property: "og:description", content: "Precision. Possibility. Intelligence." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

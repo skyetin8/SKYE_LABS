@@ -9,16 +9,16 @@ import { STUDIO_PRODUCTS, type ProductCategory } from "@/data/products";
 export const Route = createFileRoute("/products")({
   head: () => ({
     meta: [
-      { title: "Products — SKYE_LABS" },
+      { title: "Products | SKYE_LABS" },
       {
         name: "description",
         content: "Browser apps, websites, and upcoming inventions from SKYE_LABS in New York City.",
       },
-      { property: "og:title", content: "Products — SKYE_LABS" },
+      { property: "og:title", content: "Products | SKYE_LABS" },
       {
         property: "og:description",
         content:
-          "Explore FrameFlow, ScriptSymphony, Madam Melody, Glide Departures, Wink Blink Bang Mafia, Pitchify, BurnOut, and LazyLlama Health App.",
+          "Explore FrameFlow, ScriptSymphony, Madam Melody, Glide Departures, Wink Blink Bang Mafia, Pitchify, BurnOut Tracking, and Lazy Llama Health.",
       },
     ],
   }),
@@ -102,7 +102,17 @@ function ProductsPage() {
                   <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
                     <span>Featured Release</span>
                     <span aria-hidden="true">·</span>
-                    <span className="font-medium text-foreground">{flagship.status}</span>
+                    <span
+                      className={
+                        flagship.status === "Live Beta"
+                          ? "border border-ink/45 px-2 py-0.5 font-medium text-foreground"
+                          : "font-medium text-foreground"
+                      }
+                    >
+                      {flagship.status === "Live Beta"
+                        ? "Live Beta · Open Testing"
+                        : flagship.status}
+                    </span>
                   </div>
                   <h2 className="mt-5 text-4xl font-bold tracking-[-0.03em] md:text-5xl">
                     {flagship.name.toUpperCase()}
@@ -121,7 +131,7 @@ function ProductsPage() {
                     params={{ slug: flagship.slug }}
                     className="group studio-ease inline-flex min-h-[44px] items-center gap-3 bg-primary px-6 py-3 label-mono text-primary-foreground transition-opacity duration-200 hover:opacity-85"
                   >
-                    <span>View App Landing Page</span>
+                    <span>Open Product Page</span>
                     <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
                   </Link>
                   {flagship.liveUrl && (
@@ -183,7 +193,7 @@ function ProductsPage() {
         <section className="border-t border-hairline">
           <div className="mx-auto max-w-[1400px] px-6 py-6 md:px-10">
             <p className="label-mono text-muted-foreground">
-              Studio Index — {filteredProducts.length}{" "}
+              Studio Index · {filteredProducts.length}{" "}
               {filteredProducts.length === 1 ? "Entry" : "Entries"}
             </p>
           </div>
@@ -204,7 +214,15 @@ function ProductsPage() {
                     <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
                       <span>{item.category}</span>
                       <span aria-hidden="true">·</span>
-                      <span className="text-foreground">{item.status}</span>
+                      <span
+                        className={
+                          item.status === "Live Beta"
+                            ? "border border-ink/45 px-2 py-0.5 font-medium text-foreground"
+                            : "text-foreground"
+                        }
+                      >
+                        {item.status === "Live Beta" ? "Live Beta · Open Testing" : item.status}
+                      </span>
                     </div>
                     <div className="mt-3 flex items-center gap-3">
                       {item.logo && (

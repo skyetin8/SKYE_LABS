@@ -53,7 +53,7 @@ export function Signup({
         </div>
         {sent ? (
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-6">
-            <p className="label-mono text-foreground">You're on the list — {email.trim()}</p>
+            <p className="label-mono text-foreground">You're on the list: {email.trim()}</p>
             <button
               type="button"
               onClick={() => {

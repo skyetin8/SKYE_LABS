@@ -8,13 +8,13 @@ import { GridDistortion } from "@/components/site/GridDistortion";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SKYE_LABS — Invention Studio, NYC" },
+      { title: "SKYE_LABS | Invention Studio, NYC" },
       {
         name: "description",
         content:
           "An independent New York City invention studio creating original products that resolve real-life friction. Intelligent Design · Urban Mission · Limitless Impact.",
       },
-      { property: "og:title", content: "SKYE_LABS — Never Impossible" },
+      { property: "og:title", content: "SKYE_LABS | Never Impossible" },
       {
         property: "og:description",
         content:
@@ -250,7 +250,17 @@ function Index() {
                       <span aria-hidden="true">·</span>
                       <span>{product.category}</span>
                       <span aria-hidden="true">·</span>
-                      <span className="font-medium text-foreground">{product.status}</span>
+                      <span
+                        className={
+                          product.status === "Live Beta"
+                            ? "border border-ink/45 px-2 py-0.5 font-medium text-foreground"
+                            : "font-medium text-foreground"
+                        }
+                      >
+                        {product.status === "Live Beta"
+                          ? "Live Beta · Open Testing"
+                          : product.status}
+                      </span>
                     </div>
 
                     <h3 className="mt-6 text-4xl leading-[0.98] font-bold tracking-[-0.03em] md:text-5xl">
@@ -319,7 +329,17 @@ function Index() {
                       <span aria-hidden="true">·</span>
                       <span>{product.category}</span>
                       <span aria-hidden="true">·</span>
-                      <span>{product.status}</span>
+                      <span
+                        className={
+                          product.status === "Live Beta"
+                            ? "border border-ink/45 px-2 py-0.5 font-medium text-foreground"
+                            : ""
+                        }
+                      >
+                        {product.status === "Live Beta"
+                          ? "Live Beta · Open Testing"
+                          : product.status}
+                      </span>
                     </div>
                     <ArrowRight className="h-4 w-4 shrink-0 text-foreground transition-transform duration-200 group-hover:translate-x-1.5" />
                   </div>
@@ -362,7 +382,7 @@ function Index() {
                   step: "01",
                   horizon: "Now · Software & Web",
                   title: "Apps & Web Platforms",
-                  body: "Designing and shipping focused digital tools like FrameFlow, ScriptSymphony, Madam Melody, and Wink Blink Bang Mafia—open for browser use and testing.",
+                  body: "Designing and shipping focused digital tools like FrameFlow, ScriptSymphony, Madam Melody, and Wink Blink Bang Mafia, open for browser use and testing.",
                 },
                 {
                   step: "02",

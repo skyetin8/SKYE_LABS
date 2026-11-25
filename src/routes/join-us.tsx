@@ -7,13 +7,13 @@ import { Signup } from "@/components/site/Signup";
 export const Route = createFileRoute("/join-us")({
   head: () => ({
     meta: [
-      { title: "Join Us — SKYE_LABS" },
+      { title: "Join Us | SKYE_LABS" },
       {
         name: "description",
         content:
           "Back Phase One, collaborate, or work with us. Four concrete ways to participate in SKYE_LABS.",
       },
-      { property: "og:title", content: "Join Us — SKYE_LABS" },
+      { property: "og:title", content: "Join Us | SKYE_LABS" },
       {
         property: "og:description",
         content: "Fund, collaborate, build or follow along. Four ways to participate.",
@@ -32,7 +32,7 @@ const ways = [
   {
     code: "02",
     title: "Work with us",
-    body: "Designers, artists, researchers—Let’s create together. Drop us a line to discuss upcoming projects.",
+    body: "Designers, artists, researchers: let’s create together. Drop us a line to discuss upcoming projects.",
   },
   {
     code: "03",
@@ -104,7 +104,7 @@ function JoinPage() {
               </h2>
               <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
                 Our charitable and nonprofit structures remain in development. Direct online
-                donations are coming soon—in the meantime, reach out directly by email to discuss
+                donations are coming soon. In the meantime, reach out directly by email to discuss
                 backing Phase One.
               </p>
             </div>
@@ -116,7 +116,7 @@ function JoinPage() {
                 <span>Inquire About Backing</span>
                 <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
               </a>
-              <span className="label-mono text-muted-foreground">Donate — Coming Soon</span>
+              <span className="label-mono text-muted-foreground">Donate · Coming Soon</span>
             </div>
           </div>
         </section>

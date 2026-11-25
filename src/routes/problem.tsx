@@ -7,13 +7,13 @@ import { Signup } from "@/components/site/Signup";
 export const Route = createFileRoute("/problem")({
   head: () => ({
     meta: [
-      { title: "The Problem — SKYE_LABS" },
+      { title: "The Problem | SKYE_LABS" },
       {
         name: "description",
         content:
           "The human problems motivating SKYE_LABS: social isolation, housing instability, financial fragility, and community disconnection.",
       },
-      { property: "og:title", content: "The Problem — SKYE_LABS" },
+      { property: "og:title", content: "The Problem | SKYE_LABS" },
       {
         property: "og:description",
         content: "Why SKYE_LABS exists and the real-life friction our systems aim to resolve.",
@@ -30,7 +30,7 @@ const issues = [
     detail:
       "Modern software keeps people continuously connected on screens while genuine, in-person friendship and neighborhood belonging grow harder to form.",
     direction:
-      "Design digital tools whose success is measured offline—helping small cohorts of people meet, gather, and build real community.",
+      "Design digital tools whose success is measured offline, helping small cohorts of people meet, gather, and build real community.",
   },
   {
     code: "02",
@@ -111,9 +111,9 @@ function ProblemPage() {
               self-sustaining community advancement.
             </p>
             <p>
-              We start where we can execute right now—shipping digital apps people can test today—so
-              that the value created can steadily support physical inventions, a dedicated NYC
-              space, and long-term neighborhood and church-connected initiatives.
+              We start where we can execute right now by shipping digital apps people can test
+              today, so that the value created can steadily support physical inventions, a dedicated
+              NYC space, and long-term neighborhood and church-connected initiatives.
             </p>
           </div>
           <div className="mt-12 flex flex-wrap items-center gap-8">
