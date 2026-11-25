@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
-import { STUDIO_PRODUCTS, type StudioProduct } from "@/data/products";
+import { STUDIO_PRODUCTS } from "@/data/products";
 import { Signup } from "@/components/site/Signup";
 import { Footer } from "@/components/site/Footer";
 import { GridDistortion } from "@/components/site/GridDistortion";
+import { ProductTiltCard } from "@/components/site/ProductTiltCard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,73 +25,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
-
-function ProductVisualSlot({
-  product,
-  variant = "flagship",
-}: {
-  product: StudioProduct;
-  variant?: "flagship" | "grid";
-}) {
-  const isFlagship = variant === "flagship";
-  return (
-    <div
-      className={`relative flex h-full w-full flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground transition-colors duration-300 group-hover:bg-primary/92 md:p-10 ${
-        isFlagship ? "min-h-[380px] md:min-h-[460px]" : ""
-      }`}
-    >
-      {product.logo && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 flex items-center justify-end pr-4 select-none md:pr-8"
-        >
-          <img
-            src={product.logo.src}
-            alt=""
-            draggable={false}
-            className={`studio-ease object-contain grayscale contrast-125 transition-transform duration-500 ${
-              product.logo.blendScreen
-                ? "scale-[1.15] mix-blend-screen group-hover:scale-[1.19]"
-                : "group-hover:scale-[1.03]"
-            } ${
-              isFlagship
-                ? "h-[78%] w-[78%] max-w-[360px] md:h-[84%] md:w-[84%] md:max-w-[400px]"
-                : "h-[76%] w-[76%] max-w-[290px] md:h-[82%] md:w-[82%] md:max-w-[330px]"
-            }`}
-          />
-          <div className="absolute inset-0 bg-gradient-to-tr from-primary/90 via-primary/25 to-transparent" />
-        </div>
-      )}
-
-      <div className="relative z-10 flex items-start justify-between gap-6">
-        <div className="flex items-center gap-3 label-mono text-primary-foreground/70">
-          <span className="tabular-nums">{product.index}</span>
-          {product.logo && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span>{product.category}</span>
-            </>
-          )}
-        </div>
-
-        {!product.logo && (
-          <span className="label-mono text-primary-foreground/65">{product.category}</span>
-        )}
-      </div>
-
-      <div className="relative z-10 pt-12">
-        <p
-          className={`font-bold tracking-[-0.03em] ${
-            isFlagship ? "text-3xl md:text-5xl" : "text-2xl sm:text-3xl lg:text-4xl"
-          }`}
-        >
-          {product.name.toUpperCase()}
-        </p>
-        <p className="mt-3 label-mono text-primary-foreground/75">{product.platform}</p>
-      </div>
-    </div>
-  );
-}
 
 function Index() {
   const featuredProducts = STUDIO_PRODUCTS.filter((p) => p.featured).sort(
@@ -300,11 +234,11 @@ function Index() {
                 <Link
                   to="/products/$slug"
                   params={{ slug: product.slug }}
-                  className={`group relative block overflow-hidden md:col-span-6 ${
+                  className={`group relative block md:col-span-6 ${
                     flipLayout ? "md:order-1" : "md:order-2"
                   }`}
                 >
-                  <ProductVisualSlot product={product} variant="flagship" />
+                  <ProductTiltCard product={product} variant="flagship" />
                 </Link>
               </div>
             );
@@ -319,9 +253,7 @@ function Index() {
                   params={{ slug: product.slug }}
                   className="group block border-b border-hairline pb-10 transition-colors duration-200"
                 >
-                  <div className="h-[340px] overflow-hidden md:h-[400px]">
-                    <ProductVisualSlot product={product} variant="grid" />
-                  </div>
+                  <ProductTiltCard product={product} variant="grid" />
 
                   <div className="mt-6 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 label-mono text-muted-foreground">
@@ -382,7 +314,7 @@ function Index() {
                   step: "01",
                   horizon: "Now · Software & Web",
                   title: "Apps & Web Platforms",
-                  body: "Designing and shipping focused digital tools like FrameFlow, ScriptSymphony, Madam Melody, and Wink Blink Bang Mafia, open for browser use and testing.",
+                  body: "Designing and shipping focused digital tools like FrameFlow, ScriptSymphony, Madam Melody, and Pitchify, open for browser use and testing.",
                 },
                 {
                   step: "02",
@@ -414,7 +346,7 @@ function Index() {
         </section>
       </main>
 
-      <Signup />
+      <Signup showEmblem />
       <Footer />
     </div>
   );

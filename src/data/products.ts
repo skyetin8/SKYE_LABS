@@ -85,10 +85,10 @@ export interface StudioProduct {
  *   02 ScriptSymphony (Priority 2)
  *   03 Madam Melody (Priority 3)
  *   04 Glide Departures (Priority 4)
- *   05 Wink Blink Bang Mafia (Priority 5)
+ *   05 Pitchify (Priority 5)
  *
  * Catalog-Only (`featured: false`, live at /products & /products/<slug>):
- *   06 Pitchify
+ *   05 Wink Blink Bang Mafia
  *   07 BurnOut Tracking
  *   08 Lazy Llama Health
  */
@@ -615,8 +615,7 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     name: "Wink Blink Bang Mafia",
     category: "Web App",
     status: "Live · Test Now",
-    featured: true,
-    homepagePriority: 5,
+    featured: false,
     tagline:
       "Fast-paced in-person Mafia with mobile role assignment, secret winks, live voting, and ranked points, built to play anywhere with friends.",
     summary:
@@ -786,7 +785,8 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     name: "Pitchify",
     category: "Web App",
     status: "Live Beta",
-    featured: false,
+    featured: true,
+    homepagePriority: 5,
     tagline:
       "Ear training game for note recognition practice. Welcomes those in all stages of their musical journey.",
     summary:
@@ -804,6 +804,7 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     logo: {
       src: "/assets/aistudio/Option_7_857b3ada.png",
       alt: "Pitchify brandmark",
+      blendScreen: true,
     },
     wordmark: {
       src: "/assets/aistudio/Group_84_6fb3f57e.svg",

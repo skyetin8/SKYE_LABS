@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from "react";
+import { MetallicPaint } from "@/components/site/MetallicPaint";
 
 interface SignupProps {
   kicker?: string;
   description?: string;
   buttonLabel?: string;
   source?: string;
+  showEmblem?: boolean;
 }
 
 export function Signup({
@@ -12,6 +14,7 @@ export function Signup({
   description = "You don’t want to miss what's coming down the pipeline. Be a part of the mission.",
   buttonLabel = "Join",
   source = "newsletter",
+  showEmblem = true,
 }: SignupProps) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -47,10 +50,32 @@ export function Signup({
   return (
     <section className="border-t border-hairline">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-8 px-6 py-16 md:flex-row md:items-center md:justify-between md:px-10 md:py-20">
-        <div>
-          <p className="label-mono text-muted-foreground">{kicker}</p>
-          <p className="mt-3 max-w-md text-lg leading-snug">{description}</p>
-        </div>
+        {showEmblem ? (
+          <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-1">
+            <div
+              aria-hidden="true"
+              className="-ml-4 h-[136px] w-[145px] shrink-0 sm:-ml-5 sm:h-[146px] sm:w-[156px] md:h-[160px] md:w-[170px]"
+            >
+              <MetallicPaint
+                imageSrc="/assets/aistudio/skye_labs-2026logo_e3bd3a18.svg"
+                softness={0.37}
+                edgeBend={0.27}
+                scale={0.73}
+                mouseTilt={0.6}
+                lightMode={true}
+              />
+            </div>
+            <div>
+              <p className="label-mono text-muted-foreground">{kicker}</p>
+              <p className="mt-3 max-w-md text-lg leading-snug">{description}</p>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <p className="label-mono text-muted-foreground">{kicker}</p>
+            <p className="mt-3 max-w-md text-lg leading-snug">{description}</p>
+          </div>
+        )}
         {sent ? (
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-6">
             <p className="label-mono text-foreground">You're on the list: {email.trim()}</p>

@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Signup } from "@/components/site/Signup";
+import { ProductTiltCard } from "@/components/site/ProductTiltCard";
 import { STUDIO_PRODUCTS, type ProductCategory } from "@/data/products";
 
 export const Route = createFileRoute("/products")({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/products")({
       { title: "Products | SKYE_LABS" },
       {
         name: "description",
-        content: "Browser apps, websites, and upcoming inventions from SKYE_LABS in New York City.",
+        content: "Apps, websites, and upcoming inventions from SKYE_LABS in New York City.",
       },
       { property: "og:title", content: "Products | SKYE_LABS" },
       {
@@ -52,7 +53,7 @@ function ProductsPage() {
         <section className="mx-auto max-w-[1400px] px-6 pt-16 pb-12 md:px-10 md:pt-24 md:pb-16">
           <p className="label-mono text-muted-foreground">Products / What We Make</p>
           <h1 className="mt-5 max-w-4xl text-5xl leading-[0.94] font-bold tracking-[-0.03em] md:text-7xl">
-            APPS & WEB TOOLS NOW. PHYSICAL INVENTIONS NEXT.
+            APPS & WEB TOOLS
           </h1>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             SKYE_LABS builds focused software, websites, and future physical tools. Every product
@@ -151,39 +152,9 @@ function ProductsPage() {
               <Link
                 to="/products/$slug"
                 params={{ slug: flagship.slug }}
-                className="group relative block overflow-hidden md:col-span-6"
+                className="group relative block md:col-span-6"
               >
-                <div className="relative flex h-full min-h-[380px] flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground transition-colors duration-300 group-hover:bg-primary/92 md:min-h-[460px] md:p-10">
-                  {flagship.logo && (
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 flex items-center justify-end pr-4 select-none md:pr-8"
-                    >
-                      <img
-                        src={flagship.logo.src}
-                        alt=""
-                        draggable={false}
-                        className="studio-ease h-[78%] w-[78%] max-w-[360px] object-contain grayscale contrast-125 transition-transform duration-500 group-hover:scale-[1.03] md:h-[84%] md:w-[84%] md:max-w-[400px]"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-tr from-primary/90 via-primary/25 to-transparent" />
-                    </div>
-                  )}
-
-                  <div className="relative z-10 flex items-start justify-between gap-6">
-                    <span className="label-mono text-primary-foreground/70">
-                      {flagship.index} · {flagship.category}
-                    </span>
-                  </div>
-
-                  <div className="relative z-10 pt-12">
-                    <p className="text-3xl font-bold tracking-[-0.03em] md:text-5xl">
-                      {flagship.name.toUpperCase()}
-                    </p>
-                    <p className="mt-3 label-mono text-primary-foreground/75">
-                      {flagship.platform}
-                    </p>
-                  </div>
-                </div>
+                <ProductTiltCard product={flagship} variant="flagship" />
               </Link>
             </div>
           </section>
