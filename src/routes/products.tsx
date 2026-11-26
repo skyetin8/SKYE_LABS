@@ -5,7 +5,8 @@ import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { Signup } from "@/components/site/Signup";
 import { ProductTiltCard } from "@/components/site/ProductTiltCard";
-import { STUDIO_PRODUCTS, type ProductCategory } from "@/data/products";
+import { STUDIO_PRODUCTS, type ProductCategory, type StudioProduct } from "@/data/products";
+import { useScrollColorReveal } from "@/lib/use-in-view-color";
 
 export const Route = createFileRoute("/products")({
   head: () => ({
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/products")({
       {
         property: "og:description",
         content:
-          "Explore FrameFlow, ScriptSymphony, Madam Melody, Glide Departures, Wink Blink Bang Mafia, Pitchify, BurnOut Tracking, and Lazy Llama Health.",
+          "Explore FrameFlow, ScriptSymphony, Madam Melody, Glide Departures, Wink Blink Bang Mafia, Pitchify, BurnOut Tracking, Lazy Llama Health, and BabyBarista.",
       },
     ],
   }),
@@ -27,6 +28,69 @@ export const Route = createFileRoute("/products")({
 });
 
 type FilterValue = "All" | ProductCategory;
+
+function CatalogIndexRow({ item }: { item: StudioProduct }) {
+  const { ref, inViewColor } = useScrollColorReveal<HTMLElement>();
+
+  return (
+    <article ref={ref} className="border-t border-hairline">
+      <Link
+        to="/products/$slug"
+        params={{ slug: item.slug }}
+        className="group block transition-colors duration-200 hover:bg-secondary/50"
+      >
+        <div className="mx-auto grid max-w-[1400px] items-center gap-6 px-6 py-12 md:grid-cols-12 md:px-10 md:py-14">
+          <p className="label-mono text-muted-foreground tabular-nums md:col-span-2">
+            {item.index}
+          </p>
+
+          <div className="md:col-span-6">
+            <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
+              <span>{item.category}</span>
+              <span aria-hidden="true">·</span>
+              <span
+                className={
+                  item.status === "Live Beta"
+                    ? "border border-ink/45 px-2 py-0.5 font-medium text-foreground"
+                    : "text-foreground"
+                }
+              >
+                {item.status === "Live Beta" ? "Live Beta · Open Testing" : item.status}
+              </span>
+            </div>
+            <div className="mt-3 flex items-center gap-3">
+              {item.logo && (
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-primary p-1.5">
+                  <img
+                    src={item.logo.src}
+                    alt={item.logo.alt}
+                    className={`studio-ease h-full w-full object-contain transition-all duration-300 ${
+                      inViewColor
+                        ? "grayscale-0 contrast-100"
+                        : "grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100"
+                    } ${item.logo.blendScreen ? "mix-blend-screen" : ""}`}
+                  />
+                </div>
+              )}
+              <h3 className="text-3xl font-bold tracking-tight md:text-4xl">
+                {item.name.toUpperCase()}
+              </h3>
+            </div>
+            <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">{item.tagline}</p>
+          </div>
+
+          <div className="flex items-center justify-between gap-6 md:col-span-4 md:justify-end">
+            <span className="label-mono text-muted-foreground">{item.platform}</span>
+            <span className="inline-flex items-center gap-2 border-b border-ink pb-0.5 label-mono text-foreground">
+              <span>Open</span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1.5" />
+            </span>
+          </div>
+        </div>
+      </Link>
+    </article>
+  );
+}
 
 function ProductsPage() {
   const [filter, setFilter] = useState<FilterValue>("All");
@@ -97,7 +161,7 @@ function ProductsPage() {
         {/* ── Flagship App Spotlight ─────────────────────────────── */}
         {flagship && (filter === "All" || filter === flagship.category) && (
           <section className="border-t border-hairline bg-secondary/40">
-            <div className="mx-auto grid max-w-[1400px] items-stretch gap-10 px-6 py-14 md:grid-cols-12 md:gap-12 md:px-10 md:py-20">
+            <div className="group/row mx-auto grid max-w-[1400px] items-stretch gap-10 px-6 py-14 md:grid-cols-12 md:gap-12 md:px-10 md:py-20">
               <div className="flex flex-col justify-between md:col-span-6">
                 <div>
                   <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
@@ -170,62 +234,7 @@ function ProductsPage() {
           </div>
 
           {filteredProducts.map((item) => (
-            <article key={item.slug} className="border-t border-hairline">
-              <Link
-                to="/products/$slug"
-                params={{ slug: item.slug }}
-                className="group block transition-colors duration-200 hover:bg-secondary/50"
-              >
-                <div className="mx-auto grid max-w-[1400px] items-center gap-6 px-6 py-12 md:grid-cols-12 md:px-10 md:py-14">
-                  <p className="label-mono text-muted-foreground tabular-nums md:col-span-2">
-                    {item.index}
-                  </p>
-
-                  <div className="md:col-span-6">
-                    <div className="flex flex-wrap items-center gap-3 label-mono text-muted-foreground">
-                      <span>{item.category}</span>
-                      <span aria-hidden="true">·</span>
-                      <span
-                        className={
-                          item.status === "Live Beta"
-                            ? "border border-ink/45 px-2 py-0.5 font-medium text-foreground"
-                            : "text-foreground"
-                        }
-                      >
-                        {item.status === "Live Beta" ? "Live Beta · Open Testing" : item.status}
-                      </span>
-                    </div>
-                    <div className="mt-3 flex items-center gap-3">
-                      {item.logo && (
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center bg-primary p-1.5">
-                          <img
-                            src={item.logo.src}
-                            alt={item.logo.alt}
-                            className={`h-full w-full object-contain grayscale contrast-125 ${
-                              item.logo.blendScreen ? "mix-blend-screen" : ""
-                            }`}
-                          />
-                        </div>
-                      )}
-                      <h3 className="text-3xl font-bold tracking-tight md:text-4xl">
-                        {item.name.toUpperCase()}
-                      </h3>
-                    </div>
-                    <p className="mt-3 max-w-xl leading-relaxed text-muted-foreground">
-                      {item.tagline}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-6 md:col-span-4 md:justify-end">
-                    <span className="label-mono text-muted-foreground">{item.platform}</span>
-                    <span className="inline-flex items-center gap-2 border-b border-ink pb-0.5 label-mono text-foreground">
-                      <span>Open</span>
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1.5" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </article>
+            <CatalogIndexRow key={item.slug} item={item} />
           ))}
         </section>
       </main>

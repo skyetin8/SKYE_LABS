@@ -357,14 +357,16 @@ function ProductDetailPage() {
                       className={`relative w-full overflow-hidden bg-black ${
                         product.heroScreenshot.orientation === "portrait"
                           ? "flex h-[520px] items-center justify-center py-4 md:h-[600px]"
-                          : "aspect-[16/9]"
+                          : product.heroScreenshot.aspectRatio === "4/3"
+                            ? "mx-auto aspect-[4/3] max-w-[1040px]"
+                            : "aspect-[16/9]"
                       }`}
                     >
                       <img
                         src={product.heroScreenshot.src}
                         alt={product.heroScreenshot.alt}
                         draggable={false}
-                        className={`studio-ease object-contain grayscale-[35%] select-none transition-all duration-500 group-hover:scale-[1.01] group-hover:grayscale-0 ${
+                        className={`studio-ease object-contain select-none transition-transform duration-500 group-hover:scale-[1.01] ${
                           product.heroScreenshot.orientation === "portrait"
                             ? "h-full w-auto max-w-full"
                             : "h-full w-full"
@@ -392,10 +394,12 @@ function ProductDetailPage() {
                       src={product.heroScreenshot.src}
                       alt={product.heroScreenshot.alt}
                       draggable={false}
-                      className={`object-contain grayscale select-none ${
+                      className={`object-contain select-none ${
                         product.heroScreenshot.orientation === "portrait"
                           ? "h-full w-auto max-w-full"
-                          : "aspect-[16/9] w-full"
+                          : product.heroScreenshot.aspectRatio === "4/3"
+                            ? "mx-auto aspect-[4/3] w-full max-w-[1040px]"
+                            : "aspect-[16/9] w-full"
                       }`}
                     />
                   </div>
@@ -503,7 +507,9 @@ function ProductDetailPage() {
                         className={`overflow-hidden bg-black select-none ${
                           isPortrait
                             ? "flex h-[460px] items-center justify-center p-4"
-                            : "aspect-[16/9]"
+                            : shot.aspectRatio === "4/3"
+                              ? "aspect-[4/3]"
+                              : "aspect-[16/9]"
                         }`}
                       >
                         {shot.cropToPortrait ? (
@@ -592,40 +598,27 @@ function ProductDetailPage() {
               </dl>
 
               {product.wordmark && (
-                <div className="mt-8 bg-black p-6 text-white">
-                  <p className="label-mono text-white/60">Official Wordmark</p>
-                  <div className="mt-5 flex items-center justify-center border border-white/12 bg-white/[0.03] px-6 py-7">
-                    <img
-                      src={product.wordmark.src}
-                      alt={product.wordmark.alt}
-                      draggable={false}
-                      className="max-h-12 w-auto max-w-full object-contain select-none"
-                    />
-                  </div>
+                <div className="mt-8 flex items-center justify-center bg-black px-8 py-10">
+                  <img
+                    src={product.wordmark.src}
+                    alt={product.wordmark.alt}
+                    draggable={false}
+                    className="max-h-12 w-auto max-w-full object-contain select-none"
+                  />
                 </div>
               )}
 
               {product.artwork && product.artwork.length > 0 && (
-                <div className="mt-8 bg-black p-6 text-white">
-                  <p className="label-mono text-white/60">Original In-Game Artwork</p>
-                  <div className="mt-5 grid grid-cols-2 gap-4">
-                    {product.artwork.map((art) => (
-                      <div
-                        key={art.src}
-                        className="group flex flex-col items-center justify-between border border-white/12 bg-white/[0.03] p-5"
-                      >
-                        <img
-                          src={art.src}
-                          alt={art.alt}
-                          draggable={false}
-                          className="studio-ease h-24 w-24 object-contain select-none transition-transform duration-300 group-hover:scale-105"
-                        />
-                        <span className="mt-4 text-center label-mono text-white/75">
-                          {art.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-12 bg-black px-8 py-10">
+                  {product.artwork.map((art) => (
+                    <img
+                      key={art.src}
+                      src={art.src}
+                      alt={art.alt}
+                      draggable={false}
+                      className="studio-ease h-24 w-24 object-contain select-none transition-transform duration-300 hover:scale-105"
+                    />
+                  ))}
                 </div>
               )}
             </div>

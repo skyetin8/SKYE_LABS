@@ -1,5 +1,6 @@
 import { type StudioProduct } from "@/data/products";
 import { TiltedCard, TiltedCardLayer } from "@/components/site/TiltedCard";
+import { useScrollColorReveal } from "@/lib/use-in-view-color";
 
 interface ProductTiltCardProps {
   product: StudioProduct;
@@ -8,9 +9,13 @@ interface ProductTiltCardProps {
 
 export function ProductTiltCard({ product, variant = "flagship" }: ProductTiltCardProps) {
   const isFlagship = variant === "flagship";
+  const { ref, inViewColor } = useScrollColorReveal<HTMLDivElement>();
 
   return (
-    <div className={isFlagship ? "h-[380px] w-full md:h-[460px]" : "h-[340px] w-full md:h-[400px]"}>
+    <div
+      ref={ref}
+      className={isFlagship ? "h-[380px] w-full md:h-[460px]" : "h-[340px] w-full md:h-[400px]"}
+    >
       <TiltedCard
         containerWidth="100%"
         containerHeight="100%"
@@ -70,7 +75,11 @@ export function ProductTiltCard({ product, variant = "flagship" }: ProductTiltCa
                 src={product.logo.src}
                 alt=""
                 draggable={false}
-                className={`studio-ease object-contain grayscale contrast-125 transition-transform duration-500 ${
+                className={`studio-ease object-contain transition-all duration-500 ${
+                  inViewColor
+                    ? "grayscale-0 contrast-100"
+                    : "grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 group-hover/row:grayscale-0 group-hover/row:contrast-100"
+                } ${
                   product.logo.blendScreen
                     ? "scale-[1.15] mix-blend-screen group-hover:scale-[1.19]"
                     : "group-hover:scale-[1.03]"

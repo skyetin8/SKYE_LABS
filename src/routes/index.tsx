@@ -31,8 +31,8 @@ function Index() {
     (a, b) => (a.homepagePriority ?? 99) - (b.homepagePriority ?? 99),
   );
   const flagship = featuredProducts[0] ?? STUDIO_PRODUCTS[0];
-  const showcaseRows = featuredProducts.slice(0, 3);
-  const gridProducts = featuredProducts.slice(3);
+  const showcaseRows = featuredProducts.slice(0, 4);
+  const gridProducts = featuredProducts.slice(4);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
@@ -171,7 +171,7 @@ function Index() {
             return (
               <div
                 key={product.slug}
-                className="grid items-stretch gap-10 border-b border-hairline py-14 md:grid-cols-12 md:gap-12 md:py-20"
+                className="group/row grid items-stretch gap-10 border-b border-hairline py-14 md:grid-cols-12 md:gap-12 md:py-20"
               >
                 <div
                   className={`flex flex-col justify-between md:col-span-6 ${
@@ -314,7 +314,7 @@ function Index() {
                   step: "01",
                   horizon: "Now · Software & Web",
                   title: "Apps & Web Platforms",
-                  body: "Designing and shipping focused digital tools like FrameFlow, ScriptSymphony, Madam Melody, and Pitchify, open for browser use and testing.",
+                  body: "Designing and shipping focused digital tools like FrameFlow, ScriptSymphony, BabyBarista, Madam Melody, and Pitchify, open for browser use and testing.",
                 },
                 {
                   step: "02",

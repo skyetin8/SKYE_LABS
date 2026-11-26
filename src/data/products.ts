@@ -8,6 +8,8 @@ export interface ProductScreenshot {
   title?: string;
   caption?: string;
   orientation?: "landscape" | "portrait";
+  /** Optional container aspect ratio override for non-16:9 captures */
+  aspectRatio?: "16/9" | "4/3";
   /** Crop wide desktop captures cleanly into a centered portrait mobile frame */
   cropToPortrait?: boolean;
   /** Optional CSS object-position (e.g. "42% 50%") to center off-center captures */
@@ -60,7 +62,7 @@ export interface StudioProduct {
   artwork?: Array<{
     src: string;
     alt: string;
-    label: string;
+    label?: string;
   }>;
   howItWorks: Array<{
     step: string;
@@ -83,9 +85,10 @@ export interface StudioProduct {
  * Featured on Homepage (`featured: true`, ordered by `homepagePriority`):
  *   01 FrameFlow (Priority 1)
  *   02 ScriptSymphony (Priority 2)
- *   03 Madam Melody (Priority 3)
- *   04 Glide Departures (Priority 4)
- *   05 Pitchify (Priority 5)
+ *   09 BabyBarista (Priority 3)
+ *   03 Madam Melody (Priority 4)
+ *   04 Glide Departures (Priority 5)
+ *   06 Pitchify (Priority 6)
  *
  * Catalog-Only (`featured: false`, live at /products & /products/<slug>):
  *   05 Wink Blink Bang Mafia
@@ -344,7 +347,7 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     category: "Web App",
     status: "Live · Test Now",
     featured: true,
-    homepagePriority: 3,
+    homepagePriority: 4,
     tagline: "Record beats for your favorite songs in this live piano-tile game.",
     summary:
       "Play your own music, build and share groove tracks in a public library, score points, and perfect your craft.",
@@ -471,7 +474,7 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     category: "Web App",
     status: "In Development",
     featured: true,
-    homepagePriority: 4,
+    homepagePriority: 5,
     tagline:
       "Live departure and security line tracking app right in your pocket for the next time you fly.",
     summary:
@@ -786,7 +789,7 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
     category: "Web App",
     status: "Live Beta",
     featured: true,
-    homepagePriority: 5,
+    homepagePriority: 6,
     tagline:
       "Ear training game for note recognition practice. Welcomes those in all stages of their musical journey.",
     summary:
@@ -1061,6 +1064,146 @@ export const STUDIO_PRODUCTS: StudioProduct[] = [
       { label: "Core Areas", value: "Nutrition · Sleep & Wake Rhythm · Medication Reminders" },
       { label: "Notice", value: "Personal Learning Tool Only · Not Medical Advice" },
       { label: "Platform", value: "Web · iOS · Android (Coming Soon)" },
+    ],
+  },
+  {
+    slug: "babybarista",
+    index: "09",
+    name: "BabyBarista",
+    category: "Web App",
+    status: "Live Beta",
+    featured: true,
+    homepagePriority: 3,
+    tagline:
+      "A simple, totally free interactive learning course with animations to help beginner baristas feel confident behind the bar.",
+    summary:
+      "Coffee-dence starts here. Learn the fundamentals at your own pace with 60 short lessons, an Interactive Drink Lab with animated recipe layers, espresso bar equipment drills, flashcards, and stress-free practice reviews.",
+    seoDescription:
+      "BabyBarista by SKYE_LABS is a totally free interactive web learning course with animated drink layers, espresso bar equipment hotspot drills, flashcards, quizzes, and calm self-paced progress tracking to help beginner baristas feel confident behind the bar.",
+    problem:
+      "Starting your first shift behind an espresso bar can feel overwhelming, with dozens of drinks, tools, and steps to memorize on the fly.",
+    approach:
+      "Break coffee fundamentals into short, animated, zero-pressure lessons and interactive drills you can replay anytime before your first week behind the bar.",
+    platform: "Web (Live) · Mobile Coming Soon",
+    liveUrl: "https://babybarista.vercel.app/",
+    liveCtaLabel: "Launch BabyBarista",
+    accentColor: "#F25C43",
+    logo: {
+      src: "/assets/aistudio/Group_3_c8502798.png",
+      alt: "BabyBarista milk pitcher B brandmark",
+    },
+    artwork: [
+      {
+        src: "/assets/aistudio/babybarista_emblem_white.svg",
+        alt: "BabyBarista pitcher silhouette emblem",
+      },
+    ],
+    heroScreenshot: {
+      src: "/assets/aistudio/babybarista_hero_4x3.png",
+      alt: "BabyBarista welcome screen with Coffee-dence starts here headline, lesson search, and Interactive Drink Lab animated Latte and Cappuccino cups",
+      title: "Welcome to BabyBarista & Interactive Drink Lab",
+      caption:
+        "Coffee-dence starts here. Start a beginner lesson right away or tap any cup in the Interactive Drink Lab to replay its animated recipe layers.",
+      orientation: "landscape",
+      aspectRatio: "4/3",
+    },
+    screenshots: [
+      {
+        src: "/assets/aistudio/babybarista_course_4x3.png",
+        alt: "BabyBarista My Learning dashboard showing Up Next lesson and Course Material modules including Coffee 101 and Know Your Drinks",
+        title: "Guided Course Material",
+        caption:
+          "Follow 60 bite-sized lessons across Coffee 101, Know Your Drinks, and essential bar tools, or jump into any topic before a shift.",
+        orientation: "landscape",
+        aspectRatio: "4/3",
+      },
+      {
+        src: "/assets/aistudio/babybarista_diagram_4x3.png",
+        alt: "BabyBarista Espresso Bar Interactive Diagram equipment drill with tappable coral hotspots across the espresso machine, grinder, steam wand, and pitcher",
+        title: "Espresso Bar Interactive Diagram",
+        caption:
+          "Tap coral hotspots directly on the illustrated espresso station to learn the machine, grinder, group head, steam wand, knock box, and milk pitcher.",
+        orientation: "landscape",
+        aspectRatio: "4/3",
+      },
+      {
+        src: "/assets/aistudio/babybarista_practice_4x3.png",
+        alt: "BabyBarista Practice & Review screen displaying an equipment flashcard with a Barista tip alongside Quizzes, Drink ID, Ingredients, Recipe Order, and Drink Tickets tabs",
+        title: "Practice & Review Drills",
+        caption:
+          "Build real shift confidence with zero stress using flip flashcards with barista tips, quizzes, Drink ID, recipe order, and drink ticket drills.",
+        orientation: "landscape",
+        aspectRatio: "4/3",
+      },
+      {
+        src: "/assets/aistudio/babybarista_progress_4x3.png",
+        alt: "BabyBarista Your Learning Progress page showing lessons completed, quiz accuracy, categories done, learning streak, and category breakdown",
+        title: "Calm Self-Paced Progress",
+        caption:
+          "Track lessons completed, quiz accuracy, category breakdowns, and steady daily streaks at your own pace without cramming.",
+        orientation: "landscape",
+        aspectRatio: "4/3",
+      },
+    ],
+    howItWorks: [
+      {
+        step: "01",
+        title: "Learn the Basics",
+        detail:
+          "Work through short, plain-language lessons covering coffee origins, grind size, core cafe drinks, and essential bar tools.",
+      },
+      {
+        step: "02",
+        title: "Watch & Tap Animations",
+        detail:
+          "Replay animated drink layer diagrams and tap interactive espresso bar hotspots until every tool and recipe clicks.",
+      },
+      {
+        step: "03",
+        title: "Practice for Your Shift",
+        detail:
+          "Review flashcards with practical barista tips, quizzes, ingredients, recipe order, and drink tickets at your own pace.",
+      },
+    ],
+    capabilities: [
+      {
+        title: "Totally Free Beginner Curriculum",
+        detail:
+          "60 structured lessons organized into approachable modules so you never feel pressured to memorize everything before day one.",
+      },
+      {
+        title: "Interactive Drink Lab Animations",
+        detail:
+          "Tap any of the 12 most common cafe drinks, from Latte to Cappuccino, to watch its exact espresso, milk, and foam layers animate.",
+      },
+      {
+        title: "Espresso Bar Hotspot Drills",
+        detail:
+          "Practice identifying 14 essential pieces of bar equipment directly on an illustrated interactive espresso station diagram.",
+      },
+      {
+        title: "Zero-Stress Practice & Review",
+        detail:
+          "Switch between Quizzes, Drink ID, Flashcards with real barista tips, Ingredients, Tap Equipment, Recipe Order, and Drink Tickets.",
+      },
+      {
+        title: "Self-Paced Progress & Mobile Ahead",
+        detail:
+          "Track lessons completed, quiz accuracy, and steady daily streaks in your browser today, with mobile support planned for the future.",
+      },
+    ],
+    specs: [
+      { label: "Category", value: "Web App" },
+      { label: "Status", value: "Live Beta · Open for Testing" },
+      { label: "Live URL", value: "babybarista.vercel.app" },
+      { label: "Price", value: "100% Free" },
+      { label: "Curriculum", value: "60 Lessons · 12 Drinks · 14 Bar Tools" },
+      { label: "Interactive Tools", value: "Animated Drink Lab · Hotspot Drills · Flashcards" },
+      {
+        label: "Practice Modes",
+        value: "Quizzes · Drink ID · Ingredients · Recipe Order · Tickets",
+      },
+      { label: "Platform", value: "Web (Live) · Mobile Coming Soon" },
     ],
   },
 ];
